@@ -1,145 +1,96 @@
-# ELEC872 Phase 1
+# ELEC872 — Image Properties and Face Recognition
 
-Execution status and limitations: [reports/final_status.md](reports/final_status.md).
-Requirement sources: [docs/requirements_matrix.md](docs/requirements_matrix.md).
-Implementation choices beyond the proposal: [docs/decisions.md](docs/decisions.md).
+This project investigates whether face embeddings encode image processing cues,
+such as JPEG compression, sharpening, and interpolation, and how those cues may
+affect recognition and fairness. Phase 1 prepares the data, models, and feature
+pipeline needed for the proposal's later probing and mitigation experiments.
 
-Run the commands below in PowerShell from this directory. Existing files in
-`tmp` have been preserved. Data and models come from public sources; no paid
-resources are used. Korean originals are kept locally with `_kr` in their
-filenames and are excluded from Git.
+## Models
 
-```powershell
-./scripts/Setup-Environment.ps1
-.\.venv-run\Scripts\python.exe -m pip install -r requirements.lock.txt --extra-index-url https://download.pytorch.org/whl/cpu
-.\.venv-run\Scripts\python.exe scripts/acquire.py
-.\.venv-run\Scripts\python.exe scripts/environment.py
-.\.venv-run\Scripts\python.exe -m phase1.data inventory
-.\.venv-run\Scripts\python.exe scripts/decode_audit.py
-.\.venv-run\Scripts\python.exe -m phase1.data prepare --run smoke --identities 5 --per-identity 5 --extras
-.\.venv-run\Scripts\python.exe -m pytest -q tests
-.\.venv-run\Scripts\python.exe -m phase1.train --run smoke_resnet --epochs 1
-.\.venv-run\Scripts\python.exe -m phase1.train --run smoke_resnet --epochs 2 --resume checkpoints/smoke_resnet/last.pt
-.\.venv-run\Scripts\python.exe -m phase1.extract --model farl --run smoke
-.\.venv-run\Scripts\python.exe -m phase1.extract --model lvface --run smoke
-.\.venv-run\Scripts\python.exe -m phase1.extract --model resnet50 --run smoke
-.\.venv-run\Scripts\python.exe -m phase1.validate --run smoke
-```
+| Model | Role | Training in Phase 1 | Embedding |
+|---|---|---|---|
+| ResNet50 | CNN baseline | ImageNetV2 initialization; full backbone and a 480-class identity head trained on faces | 2,048-dimensional avgpool output |
+| FaRL | General face representation baseline | Official ep16 checkpoint; frozen for inference | 512-dimensional visual projection |
+| LVFace-T | Face recognition baseline | Official `vit_t` checkpoint; frozen for inference | 512-dimensional final embedding |
 
-To repeat this session's small verification run in sequence:
+## Dataset and Processing
 
-```powershell
-.\.venv-run\Scripts\python.exe scripts/execute_verified.py
-```
+The implementation uses the Kaggle `hearfool/vggface2` upload. After excluding
+14 images flagged during review, the main training manifest contains
+**140,925 training images and 35,459 internal validation images from 480 identities**.
+Photograph groups remain separate between training and internal validation.
+The original validation split of 60 identities is held out for later embedding
+comparisons on unseen identities.
 
-This command preserves the prepared smoke manifests and runs the tests,
-training/resume/continuous-training comparison, feature extraction for all
-three models, and row alignment checks. It records a log and exit code for
-each stage and stops at the first error, preserving details in
-`logs/<stage>.log`.
+Each source image produces an independent reference condition and six JPEG
+conditions: quality 75, 85, or 95, with 4:2:0 or 4:4:4 chroma subsampling.
+Sharpening, resizing, interpolation, and masking are available as additional
+processing conditions. These are controlled processing labels for the
+proposal's analysis, rather than labels identifying physical cameras.
 
-The verified runtime is `.venv-run`. It shares existing global packages on a
-**read-only basis**; no global packages were modified. The first attempt at a
-standalone installation in `.venv` was interrupted. In this session,
-`.venv-run/Lib/site-packages/project-shared.pth` reads helper dependencies
-already installed there, so keep both directories. For a fresh installation,
-the setup script above installs the required packages in the project virtual
-environment, and this auxiliary path is unnecessary. Actual import paths and
-versions are recorded in `reports/environment.json`.
+## ResNet50 Training
 
-`smoke --extras` produces 25 images × 16 conditions, including the 7 core
-JPEG conditions. To run only the core conditions, use a new run name and omit
-`--extras`. Review `reports/*_sources.png` and flag multiple faces or ambiguous
-targets before using the images.
+`phase1.main_train` trains the full ResNet50 backbone and identity head using:
 
-If a download is interrupted, rerun `scripts/acquire.py`; it resumes the
-`.part` file using HTTP Range requests. Rerunning feature extraction verifies
-and reuses completed shards. Use a new run directory if the input manifest or
-checkpoint changes. Changing the extraction batch size within a run still
-allows cached features to be matched by variant ID and reused, provided the
-model and input manifest checks pass. The original smoke/pilot trainer resumes
-from the **last completed epoch**, restoring the optimizer and identity map.
-Its losses and accuracies verify small-scale execution and do not establish
-face recognition performance.
+- Cross-entropy identity classification loss.
+- SGD with learning rate 0.001, momentum 0.9, and weight decay 0.0001.
+- Batch size 2, 2 CPU threads, and a target of 2 epochs.
+- EXIF orientation correction, resize to a shortest side of 232 pixels,
+  center crop to 224 × 224, and ImageNet normalization.
+- Original face crops, with no additional augmentation during baseline training.
 
-Start or resume face training across the full upload with the separate
-background launcher:
+From the project directory, use the prepared Python environment, dataset,
+and model weights to start or resume training:
 
 ```powershell
 .\scripts\Start-MainTraining.ps1
-# Finish the current batch, save, and pause:
-.\scripts\Stop-MainTraining.ps1
-# Start resumes last.pt only if the 2-epoch target, including validation, is incomplete.
-Get-Content reports/main_resnet_progress.json
 ```
 
-Main training uses `phase1.main_train`. After excluding the 14 images flagged
-in review, the original training split contains 480 identities with **140,925
-training images / 35,459 internal validation images**. The configuration uses
-ImageNetV2 initialization, trains the full backbone, and targets 2 epochs with
-batch size 2, 2 CPU threads, and SGD at lr 0.001.
-On 2026-10-26, the user reduced the target from 10 epochs to 2. At that point,
-epoch 2 validation had already finished, and the latest model also contained
-partial epoch 3 training. The epoch 2 validation results are preserved, but a
-separate model checkpoint from that exact point was not retained. The current
-`last.pt` must therefore not be described as a model trained for exactly
-2 epochs. The 60 identities in the original validation split are excluded.
-The exact manifest and exclusion reasons are recorded in
-`data/manifests/main_sources.csv` and `reports/main_manifest.json`.
-This does not establish that all images have been decoded or all faces and
-identities manually reviewed. A decoding error records the source identifier
-and stops the run; images are not silently skipped.
-
-Progress and loss are recorded every 20 steps. Resume state is saved at step
-10 and every 300 steps thereafter. `checkpoints/main_resnet/last.pt` includes
-the mid-epoch sample position, weights, SGD momentum, and RNG state. After an
-abrupt exit, only work since the last checkpoint must be repeated. If validation
-is interrupted, that validation pass restarts from the beginning. Exact
-agreement between mid-epoch resume and continuous training is verified in
-`tests/test_main_training.py`.
-Progress is recorded in `reports/main_resnet_progress.json`, epoch results in
-`reports/main_resnet_training.json`, and launch logs/PIDs in
-`logs/main_resnet_launch.json`. The progress JSON is a snapshot; check whether
-its recorded PID is still running to detect an unexpected exit.
-The launcher runs a separate, hidden process. While training, it temporarily
-prevents automatic Windows idle sleep without changing persistent power
-settings. The display may turn off. Training does not progress during Windows
-shutdown, explicit sleep, or lid closure. CPU training can take several days;
-completing the configured schedule does not establish recognition performance.
-
-The first model initialization downloads official ImageNetV2 weights to
-`weights/torch_cache`. Obtaining these weights does not count as completed
-face training. The original Kaggle validation split is held out for embedding
-comparisons on unseen identities and is excluded from the identity head's
-closed-set validation. Embedding comparisons can use the avgpool output from
-`load_resnet`; Phase 1 does not repeatedly tune against the final evaluation.
-
-For the Phase 2 handoff, retain `sources.csv`, each run's source/variant CSVs,
-and each model's `raw.npy`, `l2.npy`, `rows.csv`, `model.json`, and
-`validation.json`. Use only artifacts that pass the same row alignment checks;
-do not assume that different models share embedding coordinates.
-The ResNet50 smoke and pilot runs use **different checkpoints**, so their
-features must not be combined. Re-extract features using one consistent
-checkpoint for Phase 2. FaRL and LVFace each retain their respective official
-weights across both runs; overlapping source/condition pairs must not be
-counted twice.
-
-To run the measured pilot configuration (20 identities × 5 images, with
-7 core JPEG conditions):
+To save after the current batch and pause:
 
 ```powershell
-.\.venv-run\Scripts\python.exe scripts/execute_pilot.py --identities 20 --per-identity 5
+.\scripts\Stop-MainTraining.ps1
 ```
 
-This pilot's ResNet50 also uses 2 epochs of subset training and is not a fully
-validated recognition baseline. After visual review, the saved pilot contains
-**20 identities, 99 source images, and 693 variants**. The final image with
-multiple faces was excluded from the 100-image target; its identifier and the
-reason are preserved separately. Rerunning with an existing pilot manifest
-retains these review decisions. Face training uses batch size 2 and 2 threads;
-feature extraction uses batch size 8 and 4 threads, selected from actual
-measurements. The evidence for these settings is in
-`reports/inference_benchmark.json`.
-Commands for a larger 2,000-image run are provided separately in
-[docs/scale_up.md](docs/scale_up.md). This example has not been executed and
-is not included in the completed scope.
+The checkpoint at `checkpoints/main_resnet/last.pt` preserves model weights,
+optimizer momentum, RNG state, and the mid-epoch sample position. It is saved
+every 300 steps and on a requested pause. Validation runs after each epoch.
+The launcher starts no additional training once the 2-epoch target, including
+validation, has been completed.
+
+## Training Results
+
+| Completed Epoch | Training Accuracy | Internal Validation Accuracy | Internal Validation Loss |
+|---|---|---|---|
+| 1 | 44.81% | 72.23% | 1.1834 |
+| 2 | 79.93% | 81.12% | 0.8389 |
+
+Epoch 2 training and validation are complete. These validation results measure
+classification of the same 480 identities using different photographs; they do
+not measure recognition of unseen identities.
+
+The earlier 10-epoch configuration continued into epoch 3 before training
+stopped. The retained `last.pt` includes 31,948 training images from epoch 3;
+a separate checkpoint from the exact end of epoch 2 was not retained. The
+81.12% result above belongs to the epoch 2 evaluation and must not be attributed
+to the retained checkpoint without evaluating it separately. The recorded
+training results and checkpoint status are in
+[reports/main_resnet_stop_at_epoch2.json](reports/main_resnet_stop_at_epoch2.json).
+
+## Features and Next Experiments
+
+The verified smoke and pilot runs extracted features from all three models
+for 25 sources / 400 variants and 99 sources / 693 variants, respectively.
+Features are stored as raw and L2-normalized arrays, with source, identity,
+processing condition, split, and checkpoint information attached to each row.
+
+The smoke and pilot ResNet50 features use different checkpoints. Later probes
+must use features extracted with one consistent checkpoint, including a new
+extraction if the main training checkpoint is selected.
+
+The next proposal stages cover image-property probes, recognition sensitivity,
+adversarial experiments, and mitigation using an auxiliary classifier with
+gradient reversal. These experiments have not yet been implemented in Phase 1.
+Further implementation details are in [docs/decisions.md](docs/decisions.md),
+and the proposal requirements are mapped in
+[docs/requirements_matrix.md](docs/requirements_matrix.md).
