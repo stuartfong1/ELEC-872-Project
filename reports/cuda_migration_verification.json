@@ -1,0 +1,31 @@
+{
+  "verified_utc": "2026-10-26T21:04:22.2388671Z",
+  "training_entry_point": "phase1/train.py",
+  "execution_backend": "CUDA only; no CPU execution option or fallback",
+  "default_optimizer": "adam",
+  "tests": {
+    "command": "python -m pytest -q tests",
+    "passed": 18,
+    "skipped": 5,
+    "failed": 0,
+    "skip_reason": "Actual CUDA GPU unavailable in the local verification environment"
+  },
+  "cuda_training_executed": false,
+  "checks": {
+    "python_syntax": true,
+    "powershell_syntax": true,
+    "readme_links": true,
+    "old_training_module_removed": true,
+    "legacy_sgd_resume_metadata_valid": true,
+    "sgd_state_rejected_for_adam": true,
+    "existing_checkpoint_unchanged": true,
+    "docs_excluded": true,
+    "local_language_copies_excluded": true
+  },
+  "historical_sgd_checkpoint": {
+    "global_step": 156900,
+    "sha256": "6e447d5565133d97f01db822b9d99814f60b0bbef7ddc51165d2673480c7f7cc"
+  },
+  "training_code_sha256": "3db1dc6ba2cf01bd697e9c0e7c6e1e6560dea47f91541daaa85839768c468e95",
+  "note": "Host tests validate contracts and checkpoint metadata. Five hardware-gated integration cases cover CUDA train/validation, pause/resume, weight initialization and legacy/completed checkpoints; they must be run on an NVIDIA GPU before claiming GPU execution verification. Historical SGD metrics are unchanged."
+}
