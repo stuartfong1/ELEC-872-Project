@@ -103,24 +103,33 @@
     for feature extraction. Actual measurements, scope and cold-case limitation
     are in `reports/inference_benchmark.json`. Full training feasibility is
     determined after measurement, not from total installed RAM alone.
-# ResNet50 본 학습 실행 (2026-10-22 추가)
+# Main ResNet50 Training (Added 2026-10-22)
 
-사용자의 본 학습 실행 지시에 따라 `phase1.main_train`을 추가했다. 기존 smoke/pilot
-학습 코드와 결과는 보존한다. 원래 train의 480명 전체를 사용하며, 검토 제외 14장을
-반영한 별도 고정 manifest는 학습 140,925장·내부 검증 35,459장이다. 원래 val 60명은
-사용하지 않는다. 전체 수동 얼굴/신원 검토 및 전체 사전 디코딩을 완료했다는 뜻은 아니다.
+`phase1.main_train` was added at the user's request to run the main training job.
+The existing smoke/pilot training code and results are preserved. The run uses
+all 480 identities in the original training split. A separate, fixed manifest
+excludes the 14 images flagged during review, leaving 140,925 training images
+and 35,459 internal validation images. The 60 original validation identities
+are not used. This does not mean that every face and identity has been manually
+reviewed or that every image has been decoded in advance.
 
-ImageNetV2에서 새 480-class head와 전체 backbone을 학습한다. 기존 설정대로
-10 epoch, batch2, CPU 2스레드, SGD lr0.001/momentum0.9/weight decay0.0001,
-기존 resize232/center crop224/정규화, 추가 증강 없이 실행한다. 이 학습 일정의
-선택은 구현 선택이며 프로포절의 최소 성능 보장이나 수렴 기준이 아니다.
+Training starts from ImageNetV2 and updates the full backbone and a new
+480-class head. The original configuration uses 10 epochs, batch size 2,
+2 CPU threads, and SGD with lr 0.001, momentum 0.9, and weight decay 0.0001.
+It retains the existing resize to 232, center crop to 224, and normalization,
+with no additional augmentation. This schedule is an implementation choice,
+not a minimum performance guarantee or a convergence criterion in the proposal.
 
-300 step마다 원자적 last.pt를 저장하고 20 step마다 진행 JSON을 교체한다.
-고정 epoch별 순열과 소비한 표본 수를 저장해 중간 재개 시 이미 처리한 사진을
-다시 디코딩하지 않는다. optimizer momentum과 torch RNG도 복원한다.
-재개 대조 테스트는 dropout을 포함한 소형 모델에서 가중치·momentum·RNG·손실의
-정확 일치를 확인한다. 실제 ResNet50의 안전 중단·재개도 별도 기록한다.
+The run saves `last.pt` atomically every 300 steps and replaces the progress
+JSON every 20 steps. A fixed permutation for each epoch and the number of
+consumed samples allow a mid-epoch restart without decoding previously
+processed images again. Optimizer momentum and the PyTorch RNG state are also
+restored. A resume comparison using a small model with dropout verifies exact
+agreement in weights, momentum, RNG state, and loss. Safe pause and resume
+checks with the actual ResNet50 model are recorded separately.
 
-백그라운드 실행 중에만 Windows의 유휴 절전을 방지하는 실행 상태 요청을 유지한다.
-영구 전원 설정은 변경하지 않고, 표시장치 끄기와 사용자의 명시적 절전은 허용한다.
-유료 서비스·원격 실행·드라이버 변경·전역 패키지 변경은 없다.
+While the background training process is running, a Windows execution-state
+request prevents automatic idle sleep. Persistent power settings are unchanged;
+the display may turn off, and explicit user-requested sleep remains available.
+No paid services, remote execution, driver changes, or global package changes
+are involved.
