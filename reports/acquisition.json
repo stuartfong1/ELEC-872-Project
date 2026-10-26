@@ -1,0 +1,64 @@
+{
+  "hf_revision": "b12702ab1f5c721748e054a66dc90e1edd1f0724",
+  "downloads": {
+    "lvface_onnx": {
+      "status": "downloaded",
+      "path": "weights\\LVFace-T_Glint360K.onnx",
+      "bytes": 76653813,
+      "sha256": "bf8da0e1e93c432d9a1d874a9ba0990f5859f970e8864b3990f2f33d11f9cdb3",
+      "seconds": 10.660481400002027,
+      "url": "https://huggingface.co/bytedance-research/LVFace/resolve/b12702ab1f5c721748e054a66dc90e1edd1f0724/LVFace-T_Glint360K/LVFace-T_Glint360K.onnx"
+    },
+    "lvface_pt": {
+      "status": "downloaded",
+      "path": "weights\\LVFace-T_Glint360K.pt",
+      "bytes": 76611886,
+      "sha256": "1f5b73d6f7a18e431d95d2ccabb4d00dca2a6f2004eb74de2c5788d386cb59ec",
+      "seconds": 12.14743450001697,
+      "url": "https://huggingface.co/bytedance-research/LVFace/resolve/b12702ab1f5c721748e054a66dc90e1edd1f0724/LVFace-T_Glint360K/LVFace-T_Glint360K.pt"
+    },
+    "farl": {
+      "status": "downloaded",
+      "path": "weights\\FaRL-Base-Patch16-LAIONFace20M-ep16.pth",
+      "bytes": 652165542,
+      "sha256": "67b4d6bcad0cd4bdaa302741e05e92eb82ecb334ef92446555b3abd3e3cd3862",
+      "seconds": 52.10424050001893,
+      "url": "https://github.com/FacePerceiver/FaRL/releases/download/pretrained_weights/FaRL-Base-Patch16-LAIONFace20M-ep16.pth"
+    },
+    "dataset": {
+      "status": "downloaded",
+      "path": "data\\raw\\vggface2.zip",
+      "bytes": 2494011094,
+      "sha256": "aa812cf0e7f69d6204109e7335d7b1fb10b8d05a593d51f1007372ed070ee1cb",
+      "seconds": 158.9392873000179,
+      "url": "https://www.kaggle.com/api/v1/datasets/download/hearfool/vggface2"
+    }
+  },
+  "sources": [
+    {
+      "repository": "FacePerceiver/FaRL",
+      "commit": "3fb46941cb4444183442eb09748c310114bcb846",
+      "path": "third_party\\FaRL"
+    },
+    {
+      "repository": "bytedance/LVFace",
+      "commit": "80bd20c8bb78e56eb708941180d800a27c396a6b",
+      "path": "third_party\\LVFace"
+    },
+    {
+      "repository": "openai/CLIP",
+      "commit": "d05afc436d78f1c48dc0dbf8e5980a9d471f35f6",
+      "path": "third_party\\CLIP"
+    },
+    {
+      "repository": "cracker321/visual-encoder-traces",
+      "commit": "7c4859213fbde95a410307fa62cb0e2aeef12593",
+      "path": "third_party\\processors_fork"
+    },
+    {
+      "repository": "ryan-caesar-ramos/visual-encoder-traces",
+      "commit": "7c4859213fbde95a410307fa62cb0e2aeef12593",
+      "path": "third_party\\processors_original"
+    }
+  ]
+}

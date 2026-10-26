@@ -1,0 +1,88 @@
+{
+  "scope": "throughput tuning only; one original-train source; no recognition evaluation",
+  "source_id": "baaabd102f47cced6ba1324d",
+  "model": {
+    "model": "FaRL",
+    "architecture": "ViT-B/16",
+    "checkpoint": "weights/FaRL-Base-Patch16-LAIONFace20M-ep16.pth",
+    "checkpoint_sha256": "67b4d6bcad0cd4bdaa302741e05e92eb82ecb334ef92446555b3abd3e3cd3862",
+    "feature_layer": "visual CLS after ln_post and projection",
+    "input_size": 224,
+    "color": "RGB",
+    "normalization": {
+      "mean": [
+        0.48145466,
+        0.4578275,
+        0.40821073
+      ],
+      "std": [
+        0.26862954,
+        0.26130258,
+        0.27577711
+      ]
+    },
+    "loaded_visual_tensors": 152,
+    "missing_visual_tensors": [],
+    "ignored_visual_training_tensors": [
+      "lm_head.bias",
+      "lm_head.weight",
+      "lm_transformer.resblocks.0.attn.in_proj_bias",
+      "lm_transformer.resblocks.0.attn.in_proj_weight",
+      "lm_transformer.resblocks.0.attn.out_proj.bias",
+      "lm_transformer.resblocks.0.attn.out_proj.weight",
+      "lm_transformer.resblocks.0.ln_1.bias",
+      "lm_transformer.resblocks.0.ln_1.weight",
+      "lm_transformer.resblocks.0.ln_2.bias",
+      "lm_transformer.resblocks.0.ln_2.weight",
+      "lm_transformer.resblocks.0.mlp.c_fc.bias",
+      "lm_transformer.resblocks.0.mlp.c_fc.weight",
+      "lm_transformer.resblocks.0.mlp.c_proj.bias",
+      "lm_transformer.resblocks.0.mlp.c_proj.weight",
+      "ln_lm.bias",
+      "ln_lm.weight",
+      "mask_token"
+    ],
+    "role": "general facial representation; not a dedicated identity recognizer",
+    "frozen": true,
+    "evaluation_mode": true,
+    "generic_clip_weights_loaded": false
+  },
+  "warmup_note": "first case includes cold execution overhead",
+  "measurements": [
+    {
+      "threads": 2,
+      "batch_size": 2,
+      "seconds": 1.2568299999984447,
+      "images_per_second": 1.5913051088870214,
+      "sampled_rss_bytes": 466632704
+    },
+    {
+      "threads": 4,
+      "batch_size": 4,
+      "seconds": 1.5426129999978002,
+      "images_per_second": 2.593002911297716,
+      "sampled_rss_bytes": 318066688
+    },
+    {
+      "threads": 4,
+      "batch_size": 8,
+      "seconds": 2.591532399994321,
+      "images_per_second": 3.086976647491473,
+      "sampled_rss_bytes": 589549568
+    },
+    {
+      "threads": 8,
+      "batch_size": 8,
+      "seconds": 2.9511413000000175,
+      "images_per_second": 2.7108156427480963,
+      "sampled_rss_bytes": 125886464
+    }
+  ],
+  "selected": {
+    "threads": 4,
+    "batch_size": 8,
+    "seconds": 2.591532399994321,
+    "images_per_second": 3.086976647491473,
+    "sampled_rss_bytes": 589549568
+  }
+}

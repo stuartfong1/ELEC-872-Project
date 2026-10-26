@@ -1,0 +1,84 @@
+{
+  "phase1_fully_complete": false,
+  "data": {
+    "file_listing_images": {
+      "train": 176398,
+      "val": 21295
+    },
+    "file_listing_identities": {
+      "train": 480,
+      "val": 60
+    },
+    "identity_overlap": [],
+    "decode_coverage": 0,
+    "decode_failures": [],
+    "seconds": 52.897661700000754,
+    "dataset_is_full_original_vggface2": false
+  },
+  "decode_audit": {
+    "scope": "hash-selected original train only; no model evaluation",
+    "actual_decoded": 1697,
+    "valid": 1697,
+    "failures": [],
+    "identities": 463,
+    "seconds": 19.741340500011574,
+    "all_images_decoded": false
+  },
+  "models": {
+    "farl": {
+      "download": "completed",
+      "model_load": "verified",
+      "real_image_inference": "verified",
+      "face_training": "frozen pretrained; not trained locally"
+    },
+    "lvface": {
+      "download": "completed",
+      "model_load": "verified",
+      "real_image_inference": "verified",
+      "face_training": "frozen pretrained; not trained locally"
+    },
+    "resnet50": {
+      "download": "completed (ImageNet initialization only)",
+      "model_load": "verified",
+      "real_image_inference": "verified",
+      "face_training": "main training running",
+      "initialization_weight": {
+        "enum": "ResNet50_Weights.IMAGENET1K_V2",
+        "path": "weights/torch_cache/hub/checkpoints/resnet50-11ad3fa6.pth",
+        "sha256": "11ad3fa62ca79e40addfd354a8ec4b7c75143b3038b8d2a807fbc68deab379ca",
+        "url": "https://download.pytorch.org/models/resnet50-11ad3fa6.pth",
+        "status": "downloaded; not face training"
+      }
+    }
+  },
+  "smoke_validated": true,
+  "pilot_validated": true,
+  "full_resnet_training_completed": false,
+  "main_training_snapshot": {
+    "status": "running",
+    "updated_utc": "2026-10-22T23:56:47.844882+00:00",
+    "pid": 18688,
+    "epoch_index": 0,
+    "target_epochs": 10,
+    "epoch_display": 1,
+    "images_in_epoch": 480,
+    "train_images_per_epoch": 140925,
+    "validation_images": 35459,
+    "identities": 480,
+    "global_step": 240,
+    "epoch_fraction": 0.0034060670569451834,
+    "train_loss_so_far": 6.175308078527451,
+    "train_accuracy_so_far": 0.004166666666666667,
+    "train_images_per_second": 2.069455371600666,
+    "invocation_seconds": 41.730956199986394,
+    "checkpoint": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\checkpoints\\main_resnet\\last.pt",
+    "checkpoint_global_step": 193,
+    "full_face_training_completed": false,
+    "stage": "train",
+    "last_batch_loss": 6.159524917602539,
+    "peak_process_rss_bytes": 1124798464
+  },
+  "main_training_process_running": true,
+  "local_git_prepared": true,
+  "team_remote_configured": false
+}

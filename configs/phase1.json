@@ -1,0 +1,15 @@
+{
+  "seed": 872,
+  "dataset": "hearfool/vggface2",
+  "archive": "data/raw/vggface2.zip",
+  "smoke": {"identities": 5, "images_per_identity": 5},
+  "pilot": {"identities": 20, "images_per_identity": 5},
+  "considered_larger_pilot": {"identities": 100, "images_per_identity": 20},
+  "torch_threads": 4,
+  "training_torch_threads": 2,
+  "feature_batch_size": 8,
+  "reference_policy": "existing VGGFace2 crop, EXIF orientation applied once, full RGB extent, no new detection/alignment",
+  "farl": {"checkpoint": "weights/FaRL-Base-Patch16-LAIONFace20M-ep16.pth", "input": 224, "feature": "visual projection output", "frozen": true},
+  "lvface": {"checkpoint": "weights/LVFace-T_Glint360K.pt", "onnx": "weights/LVFace-T_Glint360K.onnx", "architecture": "vit_t", "input": 112, "feature": "final embedding", "frozen": true},
+  "resnet50": {"initialization": "IMAGENET1K_V2", "input": 224, "feature": "flattened avgpool before identity fc", "full_backbone_trainable": true, "epochs_main": 10, "batch_size": 2, "lr": 0.001}
+}

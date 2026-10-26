@@ -1,0 +1,277 @@
+PAGE 1
+Brown Eyes, or Metadata Lies?
+Image Properties Corrupt Face Recognition Fairness
+Stuart Fong
+ELEC 872 Student 2026
+20287149
+stuart.fong@queensu.ca
+Yujong Cho
+ELEC 872 Student 2026
+20623720
+yujong.cho@queensu.ca
+1. Problem Statement
+Facial recognition is critical in maintaining the safety and
+privacy of today’s systems. While machine learning tech-
+niques have shown great success in this area, relatively lit-
+tle is known about exactly which features they are learning.
+Modern facial recognition systems are trained on millions
+of images across the internet with the goal of accurately
+matching these face image pairs. To achieve this however,
+the models may inadvertently pick up on spurious signals,
+including the qualities of the images themselves.
+Prior work has discovered invisible shortcuts [6, 7] in-
+side of large-scale image classification models, showing
+correlations between predictions and image attributes such
+as JPEG quality and focal length. In our study, we will
+show that these same qualities are abused in face recogni-
+tion models to artificially boost performance, reducing the
+credibility that we rely on in modern recognition systems.
+The task of facial recognition can become quite complex:
+given a probe image containing a person’s face, the face
+recognition system must figure out the person’s identity out
+of a potentially large pool of candidates. If a person happens
+to be discriminable from other users based on their camera,
+such as whether they are using an Apple iPhone 12 or a
+Huawei Mate 70, then an adversary may be able to deceive
+the model by manipulating the properties of the image.
+The problem that we aim to solve is that face recogni-
+tion models are reliant on camera cues embedded in im-
+ages, such as JPEG artifacts and interpolation. This affects
+the areas ofidentity recognitionandresponsible AI, bi-
+asing these face recognition models towards learning spu-
+rious information that attackers may abuse in deceiving or
+gaining access to these systems. Fixing these issues would
+enable safer interactions with vision-enabled systems, or at
+the very least make users more cognizant of how much they
+should trust these interactive systems for digital surveil-
+lance or authentication applications.
+Figure 1. Overview of our proposed method. The output from the
+image encoder is passed through an auxilliary adversarial classifier
+that aims to remove any camera information from the embedding.
+2. Objectives and Methodology
+Our goal is to understand to what extent current face recog-
+nition systems are reliant on these cues hidden inside of ev-
+ery image. We will analyze the correlation between various
+image properties and the image embedding output from the
+image encoder. To do this, we will train classification mod-
+els on either the embedding output or the intermediate ac-
+tivations in the image encoder. If there is truly information
+about the camera attributes, then the classifier performance
+should be above random chance. Once successful, we will
+then determine to what extent the camera attributes affect
+the face recognition performance. Through varying the im-
+age properties and probing the model features, we hope to
+find feature directions indicative of the image attributes, and
+visualize how varying these attributes can affect the perfor-
+mance of the model. We will also experiment with a syn-
+thetic face recognition dataset to see if these biases are still
+present when the images are artificially generated.
+We aim to mitigate the bias in these face recognition
+systems by fine-tuning the model to disregard these image
+metadata representations. We will introduce an auxillary
+classifierC, as shown in Figure 1, that takes in the face im-
+1
+PAGE 2
+age embedding and outputs a predicted class labelˆyof the
+true image attributesyused in the photo. The classifier is
+meant to be adversarial against the image encoder, which is
+enforced using agradient reversal layer (GRL)[3]. This
+special layer acts as the identity function during the for-
+ward pass, and inverts the direction of the gradient during
+the backward pass. The two networks compete in a mini-
+max game where the image encoder aims to maximize the
+classification lossL C, while the classifier aims to minimize
+it. The image embedding will be trained to both minimize
+the face recognition lossL F R and maximize the confusion
+in classifying the camera propertiesL C, resulting in a ro-
+bust embedding that is hopefully invariant to the image at-
+tributes.
+3. Tools and Dataset
+Our analysis requires that facial images contain metadata
+so that we can extract a camera label for each image.
+Unfortunately, the datasets that we found have had their
+EXIF metadata wiped during the pre-processing stage of
+the dataset creation. While there are datasets of images
+containing metadata such as in [8], such datasets are mas-
+sive and would take extremely long to process, making it
+too much effort to be usable in our study. As an alterna-
+tive, we will make use of the Python implementation of the
+work by Ramos et al. [6] which includes functions for au-
+tomatically adding common image artifacts such as JPEG
+compression, sharpening, and interpolation. The code
+is available at https://github.com/ryan-caesar-ramos/visual-
+encoder-traces. This will allow us to create our own artifi-
+cial labels for evaluation of the face recognition models.
+While no longer being restricted to datasets that con-
+tain image metadata, we still need facial images of real
+people for training the face recognition models. Our first
+dataset option is theLabelled Faces in the Wild (LFW)
+dataset [5] which one of the standard datasets used for
+face recognition. It contains 13,233 images of 5,749
+people cropped and centered to the person’s face using
+the Viola-Jones face detector [9] in OpenCV . Each im-
+age is a250×250JPEG image. The dataset is avail-
+able at https://www.kaggle.com/datasets/jessicali9530/lfw-
+dataset. Showing that models trained on this widely-
+used dataset exhibit reliance on metadata properties would
+demonstrate the importance of this discovery and empha-
+size the need for mitigation techniques. One of our con-
+cerns for this dataset is that many people only have one
+associated image. An alternative dataset that we can use
+is theVGGFace2dataset [2]. This is a large dataset of
+3.31 million images of 9,131 subjects with an average of
+362.6 images per subject. The dataset is freely available at
+https://www.kaggle.com/datasets/hearfool/vggface2. Faces
+are detected from Google Images using an MTCNN
+model [11], and people who only have a few associated im-
+ages are filtered out. Images are also filtered using a classi-
+fication model and near-duplicate images are removed.
+One of our investigations will also involve synthet-
+ically generated face images to see if we observe the
+same biases as compared to real data. We will make
+use of theDigiFace1Mdataset [1] which contains 1
+million synthetically generated face images for face
+recognition. The dataset is available to download at
+https://github.com/microsoft/DigiFace1M. We hypothesize
+that synthetically generated images do not follow strict
+metadata rules and as such don’t contain the same traces
+as in real-world images. We will conduct experiments to
+see whether models trained on this data are still dependent
+on image properties.
+As for pre-trained machine learning models for face
+recognition, one common issue that we faced was that
+model download links were no longer working, especially
+for CNN-based face recognition models like in [2] dat-
+ing back to 2018. As such, our CNN baselines will need
+to be trained ourselves. We plan on using aResNet50
+backbone to replicate some of the results in these papers,
+which can be easily done in Pytorch. As for transformer-
+based face recognition models, theFaRL[12] checkpoint
+links are still working on the authors’ Github page at
+https://github.com/FacePerceiver/FaRL which we can use
+in our evaluation. One of the current state-of-the-art
+works,LVFace[10], has weights that are publicly avail-
+able on HuggingFace at https://huggingface.co/bytedance-
+research/LVFace with various ViT model sizes. These two
+models will be used in our evaluation. We are currently un-
+sure of how much time and compute we have, so we may or
+may not be able to finetune these models for our task using
+LoRA [4] or otherwise.
+4. Expected Outcomes
+Assuming that everything goes well, our main contribution
+will be in the analysis and mitigation of metadata reliance
+in face recognition systems.
+In analyzing the bias towards image attributes, we will
+train classifiers on the output and intermediate layers of a
+face recognition model to classify either the type of com-
+pression or the type of camera. This will be successful
+if the classification performance for these models is above
+random chance. We note that a similar study has already
+been done by [6] with excellent results, so we are not very
+concerned about failure at this stage. To demonstrate the
+urgency of this problem, we hypothesize that it is possible
+to trick a face recognition model in mistaking a badly com-
+pressed Stuart for a Yujong (maybe if you squint your eyes
+a little). We will perform an analysis of which of these im-
+age attributes or features most affects the performance and
+hopefully be able to craft a metadata-based adversarial at-
+tack using our proprietary Stuart-Yujong face image dataset.
+PAGE 3
+We will first explore mitigation techniques through a
+simple data augmentation pipeline of standard image trans-
+formations such as color jittering and resizing. We expect
+that this will somewhat work, but most of our contribution
+and novelty would come from our representation-learning-
+based training framework for face recognition debiasing.
+Our adversarial classifier should be able to remove more
+of the metadata information in the face embedding as mea-
+sured by the distance between embeddings of the same face
+image under different modifications to the image attributes.
+We are lucky that there have been no works that study this
+specific problem applied to face recognition, so we are free
+to choose our own baselines. We will likely base one off of
+the work in [7] and treat it as the state of the art, as well as
+other methods in representation learning such as the use of
+a triplet loss with positive pairs coming from the same face
+image but different image attributes. We expect our method
+to be at least comparable with the others in terms of our
+“same face different attribute” distance metric. An ablation
+study on the data augmentations vs. adversarial classifier
+should confirm the effectiveness of our proposed method.
+5. Timeline
+Phase 1 (due Oct 26).We will begin by downloading the
+needed datasets as well as some pre-trained face recognition
+models. We will see if we need to train any of the (small)
+models ourselves. This will form the basis for our analysis.
+We will set up the Github repository and add the metadata
+insertion pipeline adapted from [6].
+Phase 2 (due Nov 9).We will analyze the relationship be-
+tween the image attributes and the face recognition perfor-
+mance. This will involve training classifiers on the model
+feature activations and identifying the extent to which face
+recognition models are influenced by metadata properties.
+Phase 3 (due Nov 16).We will either find the attributes
+that most influence face recognition performance or find the
+model features that cause this behaviour. We will see if this
+can be used for adversarial attacks using some test images.
+Phase 4 (due Nov 30).We will implement our proposed
+mitigation technique for face recognition debiasing. We
+will train or fine-tune a model using an adversarial classifier
+as well as some baseline methods such as a triplet margin
+loss or the method in [7].
+Phase 5 (due Dec 14).We will write the final report and
+summarize our findings. If we have time, we will per-
+form some ablation studies to show the effectiveness of our
+method.
+References
+[1] Gwangbin Bae, Martin de La Gorce, Tadas Baltru ˇsaitis,
+Charlie Hewitt, Dong Chen, Julien Valentin, Roberto
+Cipolla, and Jingjing Shen. Digiface-1m: 1 million digital
+face images for face recognition. InWACV, pages 3515–
+3524. IEEE, 2023. 2
+[2] Qiong Cao, Li Shen, Weidi Xie, Omkar M Parkhi, and An-
+drew Zisserman. Vggface2: A dataset for recognising faces
+across pose and age. In2018 13th IEEE international con-
+ference on automatic face & gesture recognition (FG 2018),
+pages 67–74. IEEE, 2018. 2
+[3] Yaroslav Ganin and Victor Lempitsky. Unsupervised domain
+adaptation by backpropagation. InICML, pages 1180–1189.
+PMLR, 2015. 2
+[4] Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-
+Zhu, Yuanzhi Li, Shean Wang, Lu Wang, and Weizhu Chen.
+Lora: Low-rank adaptation of large language models.arXiv
+preprint arXiv:2106.09685, 2021. 2
+[5] Gary B Huang, Marwan Mattar, Tamara Berg, and Eric
+Learned-Miller. Labeled faces in the wild: A database
+forstudying face recognition in unconstrained environments.
+InWorkshop on faces in’Real-Life’Images: detection, align-
+ment, and recognition, 2008. 2
+[6] Ryan Ramos, Vladan Stojni ´c, Giorgos Kordopatis-Zilos,
+Yuta Nakashima, Giorgos Tolias, and Noa Garcia. Process-
+ing and acquisition traces in visual encoders: What does
+clip know about your camera? In2025 IEEE/CVF In-
+ternational Conference on Computer Vision (ICCV), pages
+17056–17066. IEEE, 2025. 1, 2, 3
+[7] Vladan Stojni ´c, Ryan Ramos, Giorgos Kordopatis-Zilos,
+Noa Garcia, and Giorgos Tolias. Invisible shortcuts: Why
+vision encoders know your camera. InECCV, pages 112–
+131. Springer, 2026. 1, 3
+[8] Bart Thomee, David A Shamma, Gerald Friedland, Ben-
+jamin Elizalde, Karl Ni, Douglas Poland, Damian Borth, and
+Li-Jia Li. Yfcc100m: The new data in multimedia research.
+Communications of the ACM, 59(2):64–73, 2016. 2
+[9] Paul Viola and Michael Jones. Rapid object detection using
+a boosted cascade of simple features. InCVPR, 2001. 2
+[10] Jinghan You, Shanglin Li, Yuanrui Sun, Jiangchuan Wei,
+Mingyu Guo, Chao Feng, and Jiao Ran. Lvface: Progressive
+cluster optimization for large vision models in face recogni-
+tion. InICCV, pages 11840–11849. IEEE, 2025. 2
+[11] Kaipeng Zhang, Zhanpeng Zhang, Zhifeng Li, and Yu Qiao.
+Joint face detection and alignment using multitask cascaded
+convolutional networks.IEEE signal processing letters, 23
+(10):1499–1503, 2016. 2
+[12] Yinglin Zheng, Hao Yang, Ting Zhang, Jianmin Bao, Dong-
+dong Chen, Yangyu Huang, Lu Yuan, Dong Chen, Ming
+Zeng, and Fang Wen. General facial representation learning
+in a visual-linguistic manner. InCVPR, pages 18676–18688.
+IEEE, 2022. 2

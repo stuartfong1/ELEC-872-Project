@@ -1,0 +1,16 @@
+{
+  "21fb6d1a167df11e1b549384": "visual review: secondary background face; exclude rather than select largest",
+  "bd5bf0547a56e3fabf97187a": "visual review: blurry crowded background; target ambiguity review exclusion",
+  "a396173637dbddd915629f06": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face",
+  "62a65252a961c42b18f57da7": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face",
+  "12260c05df01a5557abd0fe9": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face",
+  "f282c6aac4b4cae0e9686740": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face",
+  "26fc41ba6dac86429c906387": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face",
+  "7b4e487366ea369d493ccb86": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face",
+  "be8b876bcfef8c1331f94177": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face",
+  "a900ac7c9a6bf453b37334c4": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face",
+  "e95dba99337da74973cef90f": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face",
+  "7fa42f46bc3504c714b18ba3": "replacement visual review: secondary face remains; exclude, no largest-face assumption",
+  "5fcf6c68611cc4ceedc05bd7": "replacement visual review: secondary face remains; exclude, no largest-face assumption",
+  "90787ec08a21cc80672d4f73": "final visual review: secondary background faces; exclude without selecting largest face; retain 99 valid sources"
+}

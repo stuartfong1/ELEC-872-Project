@@ -1,0 +1,9 @@
+{
+  "scope": "hash-selected original train only; no model evaluation",
+  "actual_decoded": 1697,
+  "valid": 1697,
+  "failures": [],
+  "identities": 463,
+  "seconds": 19.741340500011574,
+  "all_images_decoded": false
+}

@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "raw_sha256_before": "ce79c8d00141b3b491dad537a16e488dff043f7adbdf0da7144249a2a0612e07",
+  "raw_sha256_after": "ce79c8d00141b3b491dad537a16e488dff043f7adbdf0da7144249a2a0612e07",
+  "computed_rows": 0,
+  "cached_rows": 400,
+  "changed_batch_size_from": 8,
+  "changed_batch_size_to": 16,
+  "row_order_unchanged": true
+}

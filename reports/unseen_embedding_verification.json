@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "shape": [
+    3,
+    2048
+  ],
+  "all_outside_training_identity_map": true,
+  "original_split": "train",
+  "no_final_evaluation_images_used": true,
+  "source_ids": [
+    "7f0831d8c08e55a4c95f1fdc",
+    "eac979f8d12108d91bee0a0c",
+    "6fe2da85f9cafef92000723a"
+  ],
+  "same_identity_cosine": 0.3331829607486725,
+  "different_identity_cosine": 0.254519522190094,
+  "limitation": "embedding pathway demonstration only; not recognition accuracy or identity probability",
+  "model": {
+    "model": "ResNet50",
+    "architecture": "torchvision ResNet50 V1.5",
+    "checkpoint": "checkpoints/smoke_resnet/last.pt",
+    "checkpoint_sha256": "ae5b71f0bd33639646c287aa64928d8705fb2866d2056d458e264070bc3cc7f2",
+    "feature_layer": "flattened avgpool before identity fc",
+    "input_size": 224,
+    "color": "RGB",
+    "normalization": "ImageNet mean/std",
+    "resize": "232 then center224",
+    "training_status": "smoke_face_training_only",
+    "epochs": 2,
+    "identities": 5,
+    "initialization": "imagenet",
+    "frozen": true,
+    "evaluation_mode": true
+  }
+}

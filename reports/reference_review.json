@@ -1,0 +1,40 @@
+{
+  "reviewed_sources": 25,
+  "source_ids": [
+    "baaabd102f47cced6ba1324d",
+    "521f27c5623312adfb872122",
+    "c8c4481d3afc80c554dd60a2",
+    "4f06ac7823a6845e019ce8ad",
+    "439bb0fc72c5ac60f623fc8d",
+    "99480b63d177edee6a597ef6",
+    "72741013504efa979e366eaf",
+    "0926e9011adc945b95d419eb",
+    "9c8401aa14b7bb5b81a13efe",
+    "c03c89a3286b33bbefcec342",
+    "5ee6a4788f11df7c419ea7e7",
+    "ec2b9dc817dc627fe5b1c192",
+    "85d884cb80d5d770302671e9",
+    "3cb6a7f2c5b78c8b6ea67d2a",
+    "69a1994d6882d4767a6624c1",
+    "5bd631c83be5294eb187e491",
+    "a8491d49bfdf100270f50245",
+    "10d41f2c28c461bca6734425",
+    "61e31f2317df546421fd7f03",
+    "96a7da126f171a6ec8a36cbe",
+    "4e8fd7d1edc089e8030ee15c",
+    "80edae0e24a4428236ecb3da",
+    "84037e4e99d30746d74e3f47",
+    "3cfa85178c429dd397407fb8",
+    "391384954f5d0569432916ec"
+  ],
+  "initial_exclusions": {
+    "21fb6d1a167df11e1b549384": "visual review: secondary background face; exclude rather than select largest",
+    "bd5bf0547a56e3fabf97187a": "visual review: blurry crowded background; target ambiguity review exclusion"
+  },
+  "replacement_review": "25 final references visually inspected; existing crops retained; no new face detection/alignment",
+  "notes": {
+    "3cfa85178c429dd397407fb8": "Background partial person noted; existing dataset crop target retained without largest-face redetection. Dataset identity label not independently verified."
+  },
+  "identity_ground_truth_independently_verified": false,
+  "all_dataset_images_visually_reviewed": false
+}

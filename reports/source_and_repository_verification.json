@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "source_copies": [
+    {
+      "destination": "phase1/upstream_processors.py",
+      "source": "third_party/processors_fork/feature_extraction/processors.py",
+      "sha256": "ccb94cbeb364b4dc06efe55c38955bc7d99ffddf3af2d78b75c630aa6fa55e35",
+      "identical": true
+    },
+    {
+      "destination": "phase1/upstream_processors.py",
+      "source": "third_party/processors_original/feature_extraction/processors.py",
+      "sha256": "ccb94cbeb364b4dc06efe55c38955bc7d99ffddf3af2d78b75c630aa6fa55e35",
+      "identical": true
+    },
+    {
+      "destination": "phase1/clip_model.py",
+      "source": "third_party/CLIP/clip/model.py",
+      "sha256": "9902cbe5ee90a1da2aa3e6f043e8a23dc1f8831193b963785c9af03d5c7bef2c",
+      "identical": true
+    }
+  ],
+  "ignored_private_paths": [
+    "data/raw/vggface2.zip",
+    "weights/LVFace-T_Glint360K.pt",
+    "features/smoke/farl/raw.npy",
+    "checkpoints/smoke_resnet/last.pt",
+    ".env",
+    "kaggle.json"
+  ],
+  "remote_output": "",
+  "published_or_pushed": false
+}

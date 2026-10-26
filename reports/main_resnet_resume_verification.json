@@ -1,0 +1,14 @@
+{
+  "checks": {
+    "checkpoint_step_restored": true,
+    "shuffle_offset_restored": true,
+    "partial_loss_restored": true,
+    "optimizer_steps_continued": true,
+    "automatic_idle_sleep_prevented": true
+  },
+  "passed": true,
+  "paused_global_step": 193,
+  "restored_global_step": 193,
+  "subsequent_global_step": 200,
+  "note": "Actual ResNet50 stopped after a batch, saved and resumed without resetting epoch position."
+}

@@ -1,0 +1,42 @@
+{
+  "source_id": "baaabd102f47cced6ba1324d",
+  "models": {
+    "farl": {
+      "shape": [
+        1,
+        512
+      ],
+      "frozen": true,
+      "eval": true,
+      "repeatable": true,
+      "checkpoint_sha256": "67b4d6bcad0cd4bdaa302741e05e92eb82ecb334ef92446555b3abd3e3cd3862"
+    },
+    "lvface": {
+      "shape": [
+        1,
+        512
+      ],
+      "frozen": true,
+      "eval": true,
+      "repeatable": true,
+      "checkpoint_sha256": "1f5b73d6f7a18e431d95d2ccabb4d00dca2a6f2004eb74de2c5788d386cb59ec",
+      "onnx_shape": [
+        1,
+        512
+      ],
+      "onnx_max_absolute_error": 7.599592208862305e-07,
+      "onnx_cosine": 0.9999999403953552,
+      "onnx_parity_passed": true
+    },
+    "resnet50": {
+      "shape": [
+        1,
+        2048
+      ],
+      "frozen": true,
+      "eval": true,
+      "repeatable": true,
+      "checkpoint_sha256": "ae5b71f0bd33639646c287aa64928d8705fb2866d2056d458e264070bc3cc7f2"
+    }
+  }
+}

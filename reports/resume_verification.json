@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "epochs": 2,
+  "compared_model_tensors": 320,
+  "maximum_absolute_parameter_difference": 0.0,
+  "optimizer_state_equal": true,
+  "manifest_sha256": "d0e2821b6b1b9348cd55193cc1c8e7b7d46a0c9aa27ccf970d791ba743cc65c1"
+}

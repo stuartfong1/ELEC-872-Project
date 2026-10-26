@@ -1,0 +1,46 @@
+{
+  "observed_utc": "2026-10-24T19:35:19.8873474Z",
+  "observation": "Training Python processes absent; progress file still reports running",
+  "cause": "Unknown; stderr empty",
+  "last_reported_progress": {
+    "status": "running",
+    "updated_utc": "2026-10-24T15:29:38.178092-04:00",
+    "pid": 30504,
+    "epoch_index": 1,
+    "target_epochs": 10,
+    "epoch_display": 2,
+    "images_in_epoch": 103794,
+    "train_images_per_epoch": 140925,
+    "validation_images": 35459,
+    "identities": 480,
+    "global_step": 122360,
+    "epoch_fraction": 0.7365194252261842,
+    "train_loss_so_far": 0.8391447417761104,
+    "train_accuracy_so_far": 0.790373239300923,
+    "train_images_per_second": 2.5331744957416293,
+    "invocation_seconds": 13624.767426300037,
+    "checkpoint": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\checkpoints\\main_resnet\\last.pt",
+    "checkpoint_global_step": 122100,
+    "full_face_training_completed": false,
+    "stage": "train",
+    "last_batch_loss": 0.6051592826843262,
+    "peak_process_rss_bytes": 1103253504
+  },
+  "latest_checkpoint_step": 122100,
+  "previous_launch": {
+    "pid": 40364,
+    "launched_utc": "2026-10-24T15:41:56.659503Z",
+    "python": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+    "arguments": [
+      "-u",
+      "-m",
+      "phase1.main_train",
+      "--resume",
+      "checkpoints/main_resnet/last.pt"
+    ],
+    "stdout": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\logs\\main_resnet_20261024_114156.stdout.log",
+    "stderr": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\logs\\main_resnet_20261024_114156.stderr.log",
+    "progress": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\reports\\main_resnet_progress.json",
+    "checkpoint": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\checkpoints\\main_resnet\\last.pt"
+  }
+}

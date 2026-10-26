@@ -1,0 +1,83 @@
+{
+  "run": "pilot",
+  "sources": 100,
+  "identities": 20,
+  "conditions": [
+    "IDENTITY",
+    "JPEG75_420",
+    "JPEG75_444",
+    "JPEG85_420",
+    "JPEG85_444",
+    "JPEG95_420",
+    "JPEG95_444"
+  ],
+  "variants": 700,
+  "condition_counts": {
+    "IDENTITY": 100,
+    "JPEG75_420": 100,
+    "JPEG75_444": 100,
+    "JPEG85_420": 100,
+    "JPEG85_444": 100,
+    "JPEG95_420": 100,
+    "JPEG95_444": 100
+  },
+  "failures": [],
+  "exclusions": [
+    {
+      "source_id": "21fb6d1a167df11e1b549384",
+      "reason": "visual review: secondary background face; exclude rather than select largest"
+    },
+    {
+      "source_id": "bd5bf0547a56e3fabf97187a",
+      "reason": "visual review: blurry crowded background; target ambiguity review exclusion"
+    },
+    {
+      "source_id": "a396173637dbddd915629f06",
+      "reason": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face"
+    },
+    {
+      "source_id": "62a65252a961c42b18f57da7",
+      "reason": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face"
+    },
+    {
+      "source_id": "12260c05df01a5557abd0fe9",
+      "reason": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face"
+    },
+    {
+      "source_id": "f282c6aac4b4cae0e9686740",
+      "reason": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face"
+    },
+    {
+      "source_id": "26fc41ba6dac86429c906387",
+      "reason": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face"
+    },
+    {
+      "source_id": "7fa42f46bc3504c714b18ba3",
+      "reason": "replacement visual review: secondary face remains; exclude, no largest-face assumption"
+    },
+    {
+      "source_id": "5fcf6c68611cc4ceedc05bd7",
+      "reason": "replacement visual review: secondary face remains; exclude, no largest-face assumption"
+    },
+    {
+      "source_id": "7b4e487366ea369d493ccb86",
+      "reason": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face"
+    },
+    {
+      "source_id": "be8b876bcfef8c1331f94177",
+      "reason": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face"
+    },
+    {
+      "source_id": "a900ac7c9a6bf453b37334c4",
+      "reason": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face"
+    },
+    {
+      "source_id": "e95dba99337da74973cef90f",
+      "reason": "pilot visual review: multiple visible faces or ambiguous target; excluded without choosing largest face"
+    }
+  ],
+  "source_decode_coverage": 100,
+  "contact_sheet_sources": 100,
+  "seconds": 89.01491520000855,
+  "peak_process_rss_bytes": 402702336
+}

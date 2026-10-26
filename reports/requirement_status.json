@@ -1,0 +1,90 @@
+[
+  {
+    "id": "P1/U3/U5",
+    "requirement": "Kaggle 데이터 확보·검사",
+    "status": "완료",
+    "evidence": "reports/data_inventory.json; reports/acquisition.json",
+    "coverage": "목록 197,693장; 별도 디코딩 표본 1,697장",
+    "remaining": "—"
+  },
+  {
+    "id": "P2/U2/U11",
+    "requirement": "FaRL·LVFace 공식 가중치 및 실제 추론",
+    "status": "완료",
+    "evidence": "reports/model_verification.json; features/smoke",
+    "coverage": "FaRL ep16 / LVFace-T; frozen/eval; 실제 출력 차원; LVFace ONNX 대조",
+    "remaining": "—"
+  },
+  {
+    "id": "P3/U12",
+    "requirement": "ResNet50 자체 얼굴 학습",
+    "status": "진행 중",
+    "evidence": "reports/main_resnet_progress.json; reports/main_manifest.json; reports/main_training_verification.json",
+    "coverage": "본 학습 480명, 학습 140,925장 / 내부 검증 35,459장, 목표 10 epoch",
+    "remaining": "전체 학습 완료 및 유효한 얼굴 인식 baseline 검증 필요"
+  },
+  {
+    "id": "P4",
+    "requirement": "저장소 준비",
+    "status": "외부 조건 필요",
+    "evidence": ".git; .gitignore",
+    "coverage": "로컬 Git 완료, 데이터·가중치 제외",
+    "remaining": "기존 팀 원격 URL 필요; 원격 생성·공개·푸시는 별도 지시"
+  },
+  {
+    "id": "P5/U9/U10",
+    "requirement": "제공된 처리 코드 연결",
+    "status": "완료",
+    "evidence": "phase1/upstream_processors.py; reports/smoke_processing.json",
+    "coverage": "25원본 × 16조건; IDENTITY+JPEG6 핵심 및 추가9 모듈",
+    "remaining": "—"
+  },
+  {
+    "id": "U6/U7",
+    "requirement": "원본 연결·라벨·분할 누출 검사",
+    "status": "완료",
+    "evidence": "data/manifests; reports/smoke_validation.json",
+    "coverage": "전체 원본 목록 및 실험 표본의 photo-group/identity 분할 검사",
+    "remaining": "전체 근접중복·사전학습 중복 여부는 미확인"
+  },
+  {
+    "id": "U8",
+    "requirement": "기준 얼굴·시각 검토",
+    "status": "완료",
+    "evidence": "reports/reference_review.json; reports/pilot_reference_review.json; reports/smoke_sources.png",
+    "coverage": "기존 크롭 유지; EXIF 방향만 1회; PNG 기준; 표본 검토 범위 별도 기록",
+    "remaining": "전체 업로드의 얼굴/신원 수동 검토는 수행하지 않음"
+  },
+  {
+    "id": "U13/U15",
+    "requirement": "모델별 특징·행 정렬·기본 유사도",
+    "status": "완료",
+    "evidence": "features; reports/*_validation.json",
+    "coverage": "raw/L2 분리; source/person/processing/model/hash/layer 매핑; 3종 유사도",
+    "remaining": "—"
+  },
+  {
+    "id": "U14",
+    "requirement": "25장 실행과 실측 확장",
+    "status": "완료",
+    "evidence": "reports/smoke_validation.json; reports/pilot_validation.json",
+    "coverage": "smoke 25장; pilot 99장",
+    "remaining": "—"
+  },
+  {
+    "id": "U4/U16/U17",
+    "requirement": "환경·실행·재개 증거",
+    "status": "완료",
+    "evidence": "reports/environment.json; reports/command_runs.jsonl; reports/resume_verification.json",
+    "coverage": "프로젝트 venv; 실제 실행 명령/종료코드; checkpoint·feature shard 재개",
+    "remaining": "—"
+  },
+  {
+    "id": "U1/U18",
+    "requirement": "문서·그림·Phase 2 인계",
+    "status": "완료",
+    "evidence": "README.md; docs; reports; data/manifests; features",
+    "coverage": "요구사항 출처와 구현 선택 구분; workflow; 실제 표본 비교; 상태·한계",
+    "remaining": "—"
+  }
+]

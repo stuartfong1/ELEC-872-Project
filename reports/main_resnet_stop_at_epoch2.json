@@ -1,0 +1,80 @@
+{
+  "observed_utc": "2026-10-26T13:57:44.0651234Z",
+  "requested_target_epochs": 2,
+  "completed_epoch_history": [
+    {
+      "epoch": 1,
+      "train_loss": 2.5661677182958695,
+      "train_accuracy": 0.4480894092602448,
+      "train_images": 140925,
+      "validation_loss": 1.183418500688689,
+      "validation_accuracy": 0.7222989932034181,
+      "validation_images": 35459,
+      "train_seconds": 74754.85001299431,
+      "images_per_second": 1.8851619657521033,
+      "global_step": 70463
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.8025746573866661,
+      "train_accuracy": 0.7993400745077168,
+      "train_images": 140925,
+      "validation_loss": 0.838858266142109,
+      "validation_accuracy": 0.8111903888998562,
+      "validation_images": 35459,
+      "train_seconds": 85908.40858959407,
+      "images_per_second": 1.6404098540951204,
+      "global_step": 140926
+    }
+  ],
+  "remaining_train_images_to_epoch2": 0,
+  "remaining_validation_images_to_epoch2": 0,
+  "current_images_per_second": 0,
+  "trainer_running": false,
+  "checkpoint": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\checkpoints\\main_resnet\\last.pt",
+  "checkpoint_global_step": 156900,
+  "checkpoint_epoch_index": 2,
+  "checkpoint_images_in_epoch": 31948,
+  "exact_epoch2_checkpoint_available": false,
+  "note": "Epoch 2 training and validation completed under the previous 10-epoch schedule. Latest checkpoint also includes partial epoch 3. No rollback or additional training performed; epoch-2 metrics are historical and are not metrics of last.pt.",
+  "previous_progress": {
+    "status": "running",
+    "updated_utc": "2026-10-26T08:35:41.564182-04:00",
+    "pid": 29220,
+    "epoch_index": 2,
+    "target_epochs": 10,
+    "epoch_display": 3,
+    "images_in_epoch": 32028,
+    "train_images_per_epoch": 140925,
+    "validation_images": 35459,
+    "identities": 480,
+    "global_step": 156940,
+    "epoch_fraction": 0.2272698243746674,
+    "train_loss_so_far": 0.42945199250870564,
+    "train_accuracy_so_far": 0.8925003122268016,
+    "train_images_per_second": 1.1236078460318641,
+    "invocation_seconds": 62826.709211800015,
+    "checkpoint": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\checkpoints\\main_resnet\\last.pt",
+    "checkpoint_global_step": 156900,
+    "full_face_training_completed": false,
+    "stage": "train",
+    "last_batch_loss": 0.5800014138221741,
+    "peak_process_rss_bytes": 746110976
+  },
+  "previous_launch": {
+    "pid": 38948,
+    "launched_utc": "2026-10-25T19:06:53.9673409Z",
+    "python": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+    "arguments": [
+      "-u",
+      "-m",
+      "phase1.main_train",
+      "--resume",
+      "checkpoints/main_resnet/last.pt"
+    ],
+    "stdout": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\logs\\main_resnet_20261025_150653.stdout.log",
+    "stderr": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\logs\\main_resnet_20261025_150653.stderr.log",
+    "progress": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\reports\\main_resnet_progress.json",
+    "checkpoint": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\checkpoints\\main_resnet\\last.pt"
+  }
+}

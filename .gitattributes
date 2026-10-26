@@ -1,0 +1,7 @@
+* text=auto eol=lf
+# Keep upstream snapshots byte-for-byte in the working tree; their whitespace
+# is part of the supplied source, not local style changes.
+phase1/upstream_processors.py -whitespace
+phase1/clip_model.py -whitespace
+docs/LICENSE_CLIP.txt -whitespace
+docs/LICENSE_LVFace.txt -whitespace

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="570" viewBox="0 0 1280 570">
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#536273"/></marker></defs>
+<rect width="1280" height="570" rx="18" fill="#f2f5f9"/>
+<g font-family="Segoe UI, Arial, sans-serif" fill="#172a43">
+<text x="40" y="52" font-size="28" font-weight="700">ELEC872 · Phase 1 workflow</text>
+<text x="40" y="81" font-size="16" fill="#536273">Real source photos → independent processing conditions → frozen model-specific features</text>
+<g stroke="#c6d2df" fill="white" stroke-width="2">
+<rect x="40" y="145" width="220" height="130" rx="12"/>
+<rect x="310" y="145" width="220" height="130" rx="12"/>
+<rect x="580" y="145" width="250" height="130" rx="12"/>
+<rect x="880" y="125" width="350" height="170" rx="12"/>
+<rect x="310" y="365" width="220" height="125" rx="12"/>
+<rect x="580" y="365" width="250" height="125" rx="12"/>
+<rect x="880" y="365" width="350" height="125" rx="12"/>
+</g>
+<g font-size="18" font-weight="700">
+<text x="58" y="178">Kaggle VGGFace2</text><text x="328" y="178">RGB reference</text>
+<text x="598" y="178">Independent conditions</text><text x="898" y="157">Model inputs + encoders</text>
+<text x="328" y="397">Own ResNet50</text><text x="598" y="397">Features + row mapping</text>
+<text x="898" y="397">Integrity validation</text>
+</g>
+<g font-size="16" fill="#536273">
+<text x="58" y="211">Immutable original ZIP</text><text x="58" y="239">Source / person / splits</text>
+<text x="328" y="211">Existing crop, fixed extent</text><text x="328" y="239">Lossless PNG, no new JPEG</text>
+<text x="598" y="211">IDENTITY + 6 JPEG settings</text><text x="598" y="239">Optional supplied processors</text>
+<text x="898" y="191">FaRL ep16 · ViT-B/16 · projected CLS</text>
+<text x="898" y="222">LVFace-T · vit_t · identity embedding</text>
+<text x="898" y="253">ResNet50 · trained avgpool feature</text>
+<text x="328" y="429">Identity loss + backprop</text><text x="328" y="459">Validate / save / resume</text>
+<text x="598" y="429">raw.npy + l2.npy + rows.csv</text><text x="598" y="459">Checkpoint hash / layer / labels</text>
+<text x="898" y="429">Linkage · splits · labels · finite values</text>
+<text x="898" y="459">Phase 2 handoff; no probe training</text>
+</g>
+<g fill="none" stroke="#536273" stroke-width="2.5" marker-end="url(#arrow)">
+<path d="M260 210 H300"/><path d="M530 210 H570"/><path d="M830 210 H870"/>
+<path d="M420 275 V355"/><path d="M1050 295 V325 H705 V355"/>
+<path d="M530 400 H550 V310 H930 V298"/><path d="M830 425 H870"/>
+</g>
+<text x="563" y="302" font-size="14" fill="#536273">Trained checkpoint</text>
+<text x="40" y="540" font-size="16" fill="#536273">Face-training photo splits and later probe identity splits are distinct. All variants inherit their source splits.</text>
+</g></svg>

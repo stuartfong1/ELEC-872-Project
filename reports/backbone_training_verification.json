@@ -1,0 +1,14 @@
+{
+  "smoke_resnet": {
+    "backbone_conv1_max_change_from_imagenet": 0.009855210781097412,
+    "identity_head_classes": 5,
+    "epochs": 2,
+    "actual_face_backbone_update_verified": true
+  },
+  "pilot_resnet": {
+    "backbone_conv1_max_change_from_imagenet": 0.017132572829723358,
+    "identity_head_classes": 20,
+    "epochs": 2,
+    "actual_face_backbone_update_verified": true
+  }
+}

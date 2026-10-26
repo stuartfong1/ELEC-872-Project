@@ -1,0 +1,33 @@
+{
+  "verified_utc": "2026-10-22T23:56:20.919764+00:00",
+  "checks": {
+    "original_train_only": true,
+    "heldout_identity_overlap_absent": true,
+    "photo_group_overlap_absent": true,
+    "reviewed_exclusions_absent": true,
+    "identities_480": true,
+    "classifier_480": true,
+    "all_model_tensors_finite": true,
+    "backbone_updated_from_imagenet": true,
+    "optimizer_momentum_saved": true,
+    "actual_backward_steps": true,
+    "manifest_hash_matches": true,
+    "trainer_process_alive": true,
+    "checkpoint_step_restored": true,
+    "shuffle_offset_restored": true,
+    "partial_loss_restored": true,
+    "optimizer_steps_continued": true,
+    "automatic_idle_sleep_prevented": true
+  },
+  "passed": true,
+  "checkpoint_global_step": 193,
+  "checkpoint_saved_utc": "2026-10-22T23:55:04.101288+00:00",
+  "checkpoint_bytes": 196307259,
+  "conv1_max_abs_change": 0.023838985711336136,
+  "train_images": 140925,
+  "validation_images": 35459,
+  "training_code_sha256": "775a58c0da855c2d7a2b0a7a733835e4f7a2793bc34587e6d1d04c015f67604a",
+  "mid_epoch_resume_test": "tests/test_main_training.py: exact weights, SGD momentum, RNG and losses verified",
+  "full_face_training_completed": false,
+  "note": "Startup and actual optimization verified; the 10-epoch schedule is still running."
+}

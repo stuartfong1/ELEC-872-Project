@@ -1,0 +1,206 @@
+[
+  {
+    "name": "extract-smoke-farl",
+    "utc_started": "2026-10-22T22:41:44.340298+00:00",
+    "original": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_verified.py"
+    ],
+    "corrected": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_features.py",
+      "--run",
+      "smoke",
+      "--batch-size",
+      "8",
+      "--threads",
+      "4"
+    ]
+  },
+  {
+    "name": "extract-smoke-lvface",
+    "utc_started": "2026-10-22T22:47:13.522067+00:00",
+    "original": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_verified.py"
+    ],
+    "corrected": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_features.py",
+      "--run",
+      "smoke",
+      "--batch-size",
+      "8",
+      "--threads",
+      "4"
+    ]
+  },
+  {
+    "name": "extract-smoke-resnet50",
+    "utc_started": "2026-10-22T22:49:27.779139+00:00",
+    "original": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_verified.py"
+    ],
+    "corrected": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_features.py",
+      "--run",
+      "smoke",
+      "--batch-size",
+      "8",
+      "--threads",
+      "4"
+    ]
+  },
+  {
+    "name": "validate-smoke",
+    "utc_started": "2026-10-22T22:52:16.464667+00:00",
+    "original": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_verified.py"
+    ],
+    "corrected": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_features.py",
+      "--run",
+      "smoke",
+      "--batch-size",
+      "8",
+      "--threads",
+      "4"
+    ]
+  },
+  {
+    "name": "verify-models",
+    "utc_started": "2026-10-22T22:52:20.444814+00:00",
+    "original": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_verified.py"
+    ],
+    "corrected": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_features.py",
+      "--run",
+      "smoke",
+      "--batch-size",
+      "8",
+      "--threads",
+      "4"
+    ]
+  },
+  {
+    "name": "environment",
+    "utc_started": "2026-10-22T22:52:35.518907+00:00",
+    "original": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_verified.py"
+    ],
+    "corrected": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_features.py",
+      "--run",
+      "smoke",
+      "--batch-size",
+      "8",
+      "--threads",
+      "4"
+    ]
+  },
+  {
+    "name": "tests-final",
+    "utc_started": "2026-10-22T22:54:45.232402+00:00",
+    "original": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_verified.py"
+    ],
+    "corrected": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_pilot.py",
+      "--identities",
+      "20",
+      "--per-identity",
+      "5"
+    ]
+  },
+  {
+    "name": "train-pilot",
+    "utc_started": "2026-10-22T22:54:48.123015+00:00",
+    "original": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_verified.py"
+    ],
+    "corrected": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_pilot.py",
+      "--identities",
+      "20",
+      "--per-identity",
+      "5"
+    ]
+  },
+  {
+    "name": "extract-pilot-farl",
+    "utc_started": "2026-10-22T22:56:25.456493+00:00",
+    "original": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_verified.py"
+    ],
+    "corrected": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_pilot.py",
+      "--identities",
+      "20",
+      "--per-identity",
+      "5"
+    ]
+  },
+  {
+    "name": "extract-pilot-lvface",
+    "utc_started": "2026-10-22T23:04:11.713900+00:00",
+    "original": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_verified.py"
+    ],
+    "corrected": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_pilot.py",
+      "--identities",
+      "20",
+      "--per-identity",
+      "5"
+    ]
+  },
+  {
+    "name": "extract-pilot-resnet50",
+    "utc_started": "2026-10-22T23:06:59.183436+00:00",
+    "original": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_verified.py"
+    ],
+    "corrected": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_pilot.py",
+      "--identities",
+      "20",
+      "--per-identity",
+      "5"
+    ]
+  },
+  {
+    "name": "validate-pilot",
+    "utc_started": "2026-10-22T23:08:11.313855+00:00",
+    "original": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_verified.py"
+    ],
+    "corrected": [
+      "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+      "scripts/execute_pilot.py",
+      "--identities",
+      "20",
+      "--per-identity",
+      "5"
+    ]
+  }
+]

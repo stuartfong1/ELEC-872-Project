@@ -1,0 +1,233 @@
+{
+  "run": "pilot",
+  "checks": {
+    "source_variant_linkage": true,
+    "balanced_conditions_and_labels": true,
+    "face_photo_group_disjoint": true,
+    "probe_identity_disjoint": true,
+    "selected_exact_duplicate_split_check": true,
+    "identity_pixel_exact_count": 99,
+    "jpeg_sampling_and_quantization_verified": true
+  },
+  "source_count": 99,
+  "variant_count": 693,
+  "original_splits": {
+    "train": 99
+  },
+  "face_splits": {
+    "face_train": 79,
+    "face_val": 20
+  },
+  "probe_splits": {
+    "probe_train": 79,
+    "probe_val": 20
+  },
+  "condition_counts": {
+    "IDENTITY": 99,
+    "JPEG75_420": 99,
+    "JPEG75_444": 99,
+    "JPEG85_420": 99,
+    "JPEG85_444": 99,
+    "JPEG95_420": 99,
+    "JPEG95_444": 99
+  },
+  "features": {
+    "farl": {
+      "shape": [
+        693,
+        512
+      ],
+      "all_finite": true,
+      "row_alignment": true,
+      "l2_unit_norm": true,
+      "similarities": {
+        "same_source_variants": {
+          "count": 594,
+          "mean": 0.9986385115067967,
+          "std": 0.0019005267618690518,
+          "min": 0.986110508441925,
+          "max": 1.0
+        },
+        "same_identity_different_photo": {
+          "count": 196,
+          "mean": 0.6118831747040456,
+          "std": 0.12114267210316358,
+          "min": 0.3022729158401489,
+          "max": 0.8740336298942566
+        },
+        "different_identity": {
+          "count": 4655,
+          "mean": 0.3336557453216147,
+          "std": 0.09243862867381303,
+          "min": 0.02204376459121704,
+          "max": 0.7144187688827515
+        }
+      },
+      "model": {
+        "model": "FaRL",
+        "architecture": "ViT-B/16",
+        "checkpoint": "weights/FaRL-Base-Patch16-LAIONFace20M-ep16.pth",
+        "checkpoint_sha256": "67b4d6bcad0cd4bdaa302741e05e92eb82ecb334ef92446555b3abd3e3cd3862",
+        "feature_layer": "visual CLS after ln_post and projection",
+        "input_size": 224,
+        "color": "RGB",
+        "normalization": {
+          "mean": [
+            0.48145466,
+            0.4578275,
+            0.40821073
+          ],
+          "std": [
+            0.26862954,
+            0.26130258,
+            0.27577711
+          ]
+        },
+        "loaded_visual_tensors": 152,
+        "missing_visual_tensors": [],
+        "ignored_visual_training_tensors": [
+          "lm_head.bias",
+          "lm_head.weight",
+          "lm_transformer.resblocks.0.attn.in_proj_bias",
+          "lm_transformer.resblocks.0.attn.in_proj_weight",
+          "lm_transformer.resblocks.0.attn.out_proj.bias",
+          "lm_transformer.resblocks.0.attn.out_proj.weight",
+          "lm_transformer.resblocks.0.ln_1.bias",
+          "lm_transformer.resblocks.0.ln_1.weight",
+          "lm_transformer.resblocks.0.ln_2.bias",
+          "lm_transformer.resblocks.0.ln_2.weight",
+          "lm_transformer.resblocks.0.mlp.c_fc.bias",
+          "lm_transformer.resblocks.0.mlp.c_fc.weight",
+          "lm_transformer.resblocks.0.mlp.c_proj.bias",
+          "lm_transformer.resblocks.0.mlp.c_proj.weight",
+          "ln_lm.bias",
+          "ln_lm.weight",
+          "mask_token"
+        ],
+        "role": "general facial representation; not a dedicated identity recognizer",
+        "frozen": true,
+        "evaluation_mode": true,
+        "generic_clip_weights_loaded": false,
+        "manifest_sha256": "3545a268808540e8304201e963fed9067cf7d97e27b779e0598e841298dc187d",
+        "raw_features": "raw.npy",
+        "normalized_features": "l2.npy",
+        "feature_normalization": "rowwise L2; raw preserved",
+        "source_run": "pilot"
+      }
+    },
+    "lvface": {
+      "shape": [
+        693,
+        512
+      ],
+      "all_finite": true,
+      "row_alignment": true,
+      "l2_unit_norm": true,
+      "similarities": {
+        "same_source_variants": {
+          "count": 594,
+          "mean": 0.9969476492517324,
+          "std": 0.00454196892073628,
+          "min": 0.9573955535888672,
+          "max": 1.0000001192092896
+        },
+        "same_identity_different_photo": {
+          "count": 196,
+          "mean": 0.2426826970851315,
+          "std": 0.13216398820365718,
+          "min": -0.054104022681713104,
+          "max": 0.6742482781410217
+        },
+        "different_identity": {
+          "count": 4655,
+          "mean": 0.12028364895029688,
+          "std": 0.07806417424204046,
+          "min": -0.13847394287586212,
+          "max": 0.4855969548225403
+        }
+      },
+      "model": {
+        "model": "LVFace",
+        "architecture": "vit_t: 112/patch9/embed256/depth12/heads8/output512",
+        "checkpoint": "weights/LVFace-T_Glint360K.pt",
+        "checkpoint_sha256": "1f5b73d6f7a18e431d95d2ccabb4d00dca2a6f2004eb74de2c5788d386cb59ec",
+        "feature_layer": "final embedding",
+        "input_size": 112,
+        "color": "RGB",
+        "normalization": "(x/255-0.5)/0.5",
+        "resize": "OpenCV INTER_LINEAR",
+        "frozen": true,
+        "evaluation_mode": true,
+        "role": "face recognition trained on Glint360K",
+        "backend": "torch",
+        "strict_state_match": true,
+        "manifest_sha256": "3545a268808540e8304201e963fed9067cf7d97e27b779e0598e841298dc187d",
+        "raw_features": "raw.npy",
+        "normalized_features": "l2.npy",
+        "feature_normalization": "rowwise L2; raw preserved",
+        "source_run": "pilot"
+      }
+    },
+    "resnet50": {
+      "shape": [
+        693,
+        2048
+      ],
+      "all_finite": true,
+      "row_alignment": true,
+      "l2_unit_norm": true,
+      "similarities": {
+        "same_source_variants": {
+          "count": 594,
+          "mean": 0.9799246812107587,
+          "std": 0.018914372421856993,
+          "min": 0.886650025844574,
+          "max": 1.0000001192092896
+        },
+        "same_identity_different_photo": {
+          "count": 196,
+          "mean": 0.3012820627844455,
+          "std": 0.09579577618688957,
+          "min": 0.11839473992586136,
+          "max": 0.631891667842865
+        },
+        "different_identity": {
+          "count": 4655,
+          "mean": 0.24739342178553184,
+          "std": 0.07111755194451302,
+          "min": 0.0839913934469223,
+          "max": 0.6032029390335083
+        }
+      },
+      "model": {
+        "model": "ResNet50",
+        "architecture": "torchvision ResNet50 V1.5",
+        "checkpoint": "checkpoints/pilot_resnet/last.pt",
+        "checkpoint_sha256": "e762e1201c5f9792400ee18cd08253bd1ad3da3686b87853cadad227a55ab2a9",
+        "feature_layer": "flattened avgpool before identity fc",
+        "input_size": 224,
+        "color": "RGB",
+        "normalization": "ImageNet mean/std",
+        "resize": "232 then center224",
+        "training_status": "subset_face_training",
+        "epochs": 2,
+        "identities": 20,
+        "initialization": "imagenet",
+        "frozen": true,
+        "evaluation_mode": true,
+        "manifest_sha256": "3545a268808540e8304201e963fed9067cf7d97e27b779e0598e841298dc187d",
+        "raw_features": "raw.npy",
+        "normalized_features": "l2.npy",
+        "feature_normalization": "rowwise L2; raw preserved",
+        "source_run": "pilot"
+      }
+    }
+  },
+  "limitations": [
+    "cosine similarity is not identity probability",
+    "no shortcut reliance, camera identification, fairness or attack conclusion",
+    "pretraining overlap with FaRL/LVFace is unknown",
+    "cross-model coordinates are not directly comparable"
+  ],
+  "passed": true
+}

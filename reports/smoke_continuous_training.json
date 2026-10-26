@@ -1,0 +1,53 @@
+{
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.6377413272857666,
+      "train_accuracy": 0.2,
+      "validation_loss": 1.5301802635192872,
+      "validation_accuracy": 0.4,
+      "train_images": 20,
+      "validation_images": 5,
+      "backward_steps": 10,
+      "train_seconds": 32.026408899982926,
+      "images_per_second": 0.6244846264986851,
+      "peak_process_rss_bytes": 372277248,
+      "resumed_from_epoch": 0
+    },
+    {
+      "epoch": 2,
+      "train_loss": 1.597880780696869,
+      "train_accuracy": 0.35,
+      "validation_loss": 1.492086148262024,
+      "validation_accuracy": 0.4,
+      "train_images": 20,
+      "validation_images": 5,
+      "backward_steps": 10,
+      "train_seconds": 52.26135260000592,
+      "images_per_second": 0.3826919703566519,
+      "peak_process_rss_bytes": 392552448,
+      "resumed_from_epoch": 0
+    }
+  ],
+  "config": {
+    "manifest": "data/manifests/smoke_sources.csv",
+    "batch_size": 2,
+    "threads": 2,
+    "device": "cpu",
+    "lr": 0.001,
+    "initialization": "imagenet",
+    "run": "smoke_continuous",
+    "epochs": 2,
+    "resume": null
+  },
+  "identity_map": {
+    "n000139": 0,
+    "n000174": 1,
+    "n000228": 2,
+    "n000279": 3,
+    "n000437": 4
+  },
+  "wall_seconds_this_invocation": 94.460405299993,
+  "status": "smoke_face_training_only",
+  "full_face_training_completed": false
+}

@@ -1,0 +1,68 @@
+{
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 3.0240645680246474,
+      "train_accuracy": 0.06329113924050633,
+      "validation_loss": 2.9804352521896362,
+      "validation_accuracy": 0.1,
+      "train_images": 79,
+      "validation_images": 20,
+      "backward_steps": 40,
+      "train_seconds": 50.999589600018226,
+      "images_per_second": 1.5490320729947946,
+      "peak_process_rss_bytes": 522821632,
+      "resumed_from_epoch": 0
+    },
+    {
+      "epoch": 2,
+      "train_loss": 2.9419454622872268,
+      "train_accuracy": 0.20253164556962025,
+      "validation_loss": 2.942077612876892,
+      "validation_accuracy": 0.15,
+      "train_images": 79,
+      "validation_images": 20,
+      "backward_steps": 40,
+      "train_seconds": 35.863790100003826,
+      "images_per_second": 2.202778897035525,
+      "peak_process_rss_bytes": 522821632,
+      "resumed_from_epoch": 0
+    }
+  ],
+  "config": {
+    "manifest": "data/manifests/pilot_sources.csv",
+    "run": "pilot_resnet",
+    "batch_size": 2,
+    "threads": 2,
+    "device": "cpu",
+    "lr": 0.001,
+    "initialization": "imagenet",
+    "epochs": 2,
+    "resume": null
+  },
+  "identity_map": {
+    "n000015": 0,
+    "n000043": 1,
+    "n000058": 2,
+    "n000087": 3,
+    "n000109": 4,
+    "n000134": 5,
+    "n000139": 6,
+    "n000159": 7,
+    "n000174": 8,
+    "n000199": 9,
+    "n000228": 10,
+    "n000279": 11,
+    "n000305": 12,
+    "n000330": 13,
+    "n000342": 14,
+    "n000377": 15,
+    "n000392": 16,
+    "n000437": 17,
+    "n000482": 18,
+    "n000499": 19
+  },
+  "wall_seconds_this_invocation": 95.85853359999601,
+  "status": "subset_face_training",
+  "full_face_training_completed": false
+}

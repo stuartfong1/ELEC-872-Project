@@ -1,0 +1,8 @@
+{
+  "considered_pilot_sources": 2000,
+  "considered_pilot_core_variants": 14000,
+  "projected_three_model_extraction_hours": 3.9051780684626514,
+  "excludes": "reference preparation, processing, review, training, thermal/I/O changes",
+  "actual_pilot_sources": 99,
+  "pilot_mandatory_in_proposal": false
+}

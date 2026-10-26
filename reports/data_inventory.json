@@ -1,0 +1,15 @@
+{
+  "file_listing_images": {
+    "train": 176398,
+    "val": 21295
+  },
+  "file_listing_identities": {
+    "train": 480,
+    "val": 60
+  },
+  "identity_overlap": [],
+  "decode_coverage": 0,
+  "decode_failures": [],
+  "seconds": 52.897661700000754,
+  "dataset_is_full_original_vggface2": false
+}

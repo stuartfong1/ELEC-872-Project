@@ -1,0 +1,44 @@
+{
+  "observed_utc": "2026-10-25T19:06:51.8850748Z",
+  "reason": "Resume requested; prior trainer process absent. Cause unknown; no stderr evidence.",
+  "previous_progress": {
+    "status": "running",
+    "updated_utc": "2026-10-25T02:05:05.180973-04:00",
+    "pid": 39476,
+    "epoch_index": 1,
+    "target_epochs": 10,
+    "epoch_display": 2,
+    "images_in_epoch": 128354,
+    "train_images_per_epoch": 140925,
+    "validation_images": 35459,
+    "identities": 480,
+    "global_step": 134640,
+    "epoch_fraction": 0.9107965229732127,
+    "train_loss_so_far": 0.8140019942923735,
+    "train_accuracy_so_far": 0.7964769309877371,
+    "train_images_per_second": 2.0155703147355064,
+    "invocation_seconds": 16776.87442950002,
+    "checkpoint": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\checkpoints\\main_resnet\\last.pt",
+    "checkpoint_global_step": 134400,
+    "full_face_training_completed": false,
+    "stage": "train",
+    "last_batch_loss": 1.1749696731567383,
+    "peak_process_rss_bytes": 1075109888
+  },
+  "previous_launch": {
+    "pid": 36260,
+    "launched_utc": "2026-10-25T01:25:01.8444605Z",
+    "python": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\.venv-run\\Scripts\\python.exe",
+    "arguments": [
+      "-u",
+      "-m",
+      "phase1.main_train",
+      "--resume",
+      "checkpoints/main_resnet/last.pt"
+    ],
+    "stdout": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\logs\\main_resnet_20261024_212501.stdout.log",
+    "stderr": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\logs\\main_resnet_20261024_212501.stderr.log",
+    "progress": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\reports\\main_resnet_progress.json",
+    "checkpoint": "E:\\Users\\yujong\\Desktop\\Queens work\\AI and Interactive Systems\\final project\\code\\checkpoints\\main_resnet\\last.pt"
+  }
+}
