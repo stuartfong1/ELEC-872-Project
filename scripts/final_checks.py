@@ -29,8 +29,15 @@ def source_and_git():
     source_checks = []
     for destination, source in copies:
         a,b = sha256(destination), sha256(source)
-        assert a == b
-        source_checks.append(dict(destination=destination, source=source, sha256=a, identical=True))
+        body = (ROOT / destination).read_bytes()
+        has_license_header = destination == 'phase1/clip_model.py'
+        if has_license_header:
+            assert body.startswith(b'# BEGIN CLIP LICENSE\n')
+            body = body.split(b'# END CLIP LICENSE\n\n', 1)[1]
+        assert body == (ROOT / source).read_bytes()
+        source_checks.append(dict(destination=destination, source=source, sha256=a,
+                                 source_sha256=b, identical=a == b,
+                                 source_body_identical=True, license_header=has_license_header))
     private_paths = ['data/raw/vggface2.zip', 'weights/LVFace-T_Glint360K.pt',
                      'features/smoke/farl/raw.npy', 'checkpoints/smoke_resnet/last.pt', '.env', 'kaggle.json']
     for path in private_paths:

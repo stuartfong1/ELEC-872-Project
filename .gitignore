@@ -9,6 +9,7 @@ third_party/
 tmp/
 logs/
 /docs/
+/licenses/
 .env
 kaggle.json
 *.part
