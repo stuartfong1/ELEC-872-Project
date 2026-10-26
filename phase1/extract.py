@@ -7,9 +7,11 @@ import psutil
 import torch
 from .common import ROOT, read_csv, write_csv, write_json, sha256
 from .models import load_farl, load_lvface, load_resnet
+from .train import require_cuda
 
 
 def extract(args):
+    device = require_cuda(getattr(args, 'gpu', 0))
     torch.set_num_threads(args.threads)
     rows = read_csv(f'data/manifests/{args.run}_variants.csv')
     if any(r['status'] != 'ok' for r in rows):
@@ -17,14 +19,17 @@ def extract(args):
     if args.model == 'farl':
         model, preprocess, metadata = load_farl()
     elif args.model == 'lvface':
-        model, preprocess, metadata = load_lvface(args.backend)
+        model, preprocess, metadata = load_lvface(args.backend, gpu=device.index if args.backend == 'onnx' else None)
     else:
         model, preprocess, metadata = load_resnet(args.checkpoint)
+    if args.backend == 'torch':
+        model = model.to(device)
     dest = ROOT / 'features' / args.run / (args.model + ('_onnx' if args.backend == 'onnx' else ''))
     dest.mkdir(parents=True, exist_ok=True)
     input_sha = sha256(f'data/manifests/{args.run}_variants.csv')
     metadata.update(manifest_sha256=input_sha, raw_features='raw.npy', normalized_features='l2.npy',
-                    feature_normalization='rowwise L2; raw preserved', source_run=args.run)
+                    feature_normalization='rowwise L2; raw preserved', source_run=args.run,
+                    inference_backend='cuda', gpu_name=torch.cuda.get_device_name(device))
     metadata = json.loads(json.dumps(metadata))
     # Resume immutable batches only if the checkpoint, inputs and preprocessing match.
     meta_path = dest / 'model.json'
@@ -62,7 +67,7 @@ def extract(args):
                     feature = np.concatenate([model.run(None, {model.get_inputs()[0].name: x.numpy()[None]})[0]
                                               for x in batch], axis=0)
                 else:
-                    feature = model(batch).cpu().numpy()
+                    feature = model(batch.to(device)).cpu().numpy()
             feature = np.asarray(feature, dtype=np.float32)
             if feature.ndim != 2 or len(feature) != len(batch_rows) or not np.isfinite(feature).all():
                 raise ValueError(f'Invalid model output at offset {offset}')
@@ -88,6 +93,7 @@ def extract(args):
     elapsed = time.perf_counter() - start
     report = dict(model=metadata, shape=list(raw.shape), seconds=elapsed, computed_rows= computed,
                   cached_rows=len(rows)-computed, execution_threads=args.threads, execution_batch_size=args.batch_size,
+                  execution_device=str(device),
                   images_per_second=computed / elapsed, peak_process_rss_bytes=peak_rss,
                   all_finite=bool(np.isfinite(raw).all()), row_alignment=True,
                   rows_sha256=sha256(dest / 'rows.csv'), raw_sha256=sha256(dest / 'raw.npy'))
@@ -101,11 +107,12 @@ def extract(args):
 if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('--model', required=True, choices=['farl', 'lvface', 'resnet50'])
-    p.add_argument('--run', default='smoke')
+    p.add_argument('--run', default='smoke_adam')
     p.add_argument('--backend', choices=['torch', 'onnx'], default='torch')
-    p.add_argument('--checkpoint', default='checkpoints/smoke_resnet/last.pt')
+    p.add_argument('--checkpoint', default='checkpoints/smoke_adam_resnet/last.pt')
     p.add_argument('--batch-size', type=int, default=8)
     p.add_argument('--threads', type=int, default=4)
+    p.add_argument('--gpu', type=int, default=0)
     a = p.parse_args()
     if a.backend == 'onnx' and a.model != 'lvface':
         p.error('ONNX backend is only for LVFace')

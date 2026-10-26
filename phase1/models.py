@@ -58,7 +58,7 @@ def lvface_preprocess(image):
     return torch.from_numpy(a.copy())
 
 
-def load_lvface(backend='torch'):
+def load_lvface(backend='torch', gpu=None):
     pt = 'weights/LVFace-T_Glint360K.pt'
     onnx = 'weights/LVFace-T_Glint360K.onnx'
     meta = dict(model='LVFace', architecture='vit_t: 112/patch9/embed256/depth12/heads8/output512',
@@ -72,7 +72,13 @@ def load_lvface(backend='torch'):
         opts = ort.SessionOptions()
         opts.intra_op_num_threads = 4
         opts.inter_op_num_threads = 1
-        session = ort.InferenceSession(str(ROOT / onnx), sess_options=opts, providers=['CPUExecutionProvider'])
+        providers = ['CPUExecutionProvider']
+        if gpu is not None:
+            if 'CUDAExecutionProvider' not in ort.get_available_providers():
+                raise RuntimeError('ONNX CUDA provider is unavailable; install requirements-cuda.txt')
+            opts.add_session_config_entry('session.disable_cpu_ep_fallback', '1')
+            providers = [('CUDAExecutionProvider', {'device_id': gpu})]
+        session = ort.InferenceSession(str(ROOT / onnx), sess_options=opts, providers=providers)
         meta['onnx_input_shape'] = session.get_inputs()[0].shape
         return session, lvface_preprocess, meta
     sys.path.insert(0, str(ROOT / 'third_party/LVFace'))
