@@ -8,6 +8,7 @@ checkpoints/
 third_party/
 tmp/
 logs/
+/docs/
 .env
 kaggle.json
 *.part

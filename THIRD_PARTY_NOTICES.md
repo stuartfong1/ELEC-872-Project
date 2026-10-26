@@ -10,11 +10,11 @@ The exact fetched commits and download URLs/hashes are recorded in
   matches this API. Wrapper code is in `phase1/processing.py`.
 - `phase1/clip_model.py`: OpenAI CLIP architecture source, commit
   `d05afc436d78f1c48dc0dbf8e5980a9d471f35f6`; MIT license in
-  `docs/LICENSE_CLIP.txt`. Only its ViT-B/16 architecture is used with official
+  `licenses/LICENSE_CLIP.txt`. Only its ViT-B/16 architecture is used with official
   FaRL weights, not generic CLIP weights.
 - `third_party/LVFace`: official Bytedance repository, commit
   `80bd20c8bb78e56eb708941180d800a27c396a6b`; license in
-  `docs/LICENSE_LVFace.txt`. `vit_t` must be specified; its example's `r50`
+  `licenses/LICENSE_LVFace.txt`. `vit_t` must be specified; its example's `r50`
   default is not used. Downloaded by `scripts/acquire.py`, excluded from Git.
 - FaRL checkpoint: official ep16, SHA-256
   `67b4d6bcad0cd4bdaa302741e05e92eb82ecb334ef92446555b3abd3e3cd3862`.

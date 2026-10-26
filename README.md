@@ -91,6 +91,5 @@ extraction if the main training checkpoint is selected.
 The next proposal stages cover image-property probes, recognition sensitivity,
 adversarial experiments, and mitigation using an auxiliary classifier with
 gradient reversal. These experiments have not yet been implemented in Phase 1.
-Further implementation details are in [docs/decisions.md](docs/decisions.md),
-and the proposal requirements are mapped in
-[docs/requirements_matrix.md](docs/requirements_matrix.md).
+Third-party sources and licenses are listed in
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
