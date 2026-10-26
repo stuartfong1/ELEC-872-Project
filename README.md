@@ -138,4 +138,3 @@ ResNet50 features from different checkpoints must not be pooled. Later probes
 require a new, consistent feature extraction if the training checkpoint changes.
 The next proposal stages cover property probes, recognition sensitivity,
 adversarial experiments, and gradient-reversal mitigation; these remain future work.
-Third-party sources and licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
