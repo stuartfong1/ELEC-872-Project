@@ -1,90 +1,90 @@
 [
   {
     "id": "P1/U3/U5",
-    "requirement": "Kaggle 데이터 확보·검사",
-    "status": "완료",
+    "requirement": "Acquire and inspect the Kaggle dataset",
+    "status": "Complete",
     "evidence": "reports/data_inventory.json; reports/acquisition.json",
-    "coverage": "목록 197,693장; 별도 디코딩 표본 1,697장",
+    "coverage": "Inventory of 197,693 images; separate decoding audit of 1,697 images",
     "remaining": "—"
   },
   {
     "id": "P2/U2/U11",
-    "requirement": "FaRL·LVFace 공식 가중치 및 실제 추론",
-    "status": "완료",
+    "requirement": "Obtain official FaRL and LVFace weights and run inference",
+    "status": "Complete",
     "evidence": "reports/model_verification.json; features/smoke",
-    "coverage": "FaRL ep16 / LVFace-T; frozen/eval; 실제 출력 차원; LVFace ONNX 대조",
+    "coverage": "FaRL ep16 / LVFace-T; frozen weights and evaluation mode; verified output dimensions; LVFace ONNX comparison",
     "remaining": "—"
   },
   {
     "id": "P3/U12",
-    "requirement": "ResNet50 자체 얼굴 학습",
-    "status": "진행 중",
+    "requirement": "Train ResNet50 on face identities",
+    "status": "In progress",
     "evidence": "reports/main_resnet_progress.json; reports/main_manifest.json; reports/main_training_verification.json",
-    "coverage": "본 학습 480명, 학습 140,925장 / 내부 검증 35,459장, 목표 10 epoch",
-    "remaining": "전체 학습 완료 및 유효한 얼굴 인식 baseline 검증 필요"
+    "coverage": "Main training on 480 identities, with 140,925 training images and 35,459 internal validation images; target of 10 epochs",
+    "remaining": "Complete training and validate a usable face recognition baseline"
   },
   {
     "id": "P4",
-    "requirement": "저장소 준비",
-    "status": "외부 조건 필요",
+    "requirement": "Prepare the repository",
+    "status": "Awaiting external input",
     "evidence": ".git; .gitignore",
-    "coverage": "로컬 Git 완료, 데이터·가중치 제외",
-    "remaining": "기존 팀 원격 URL 필요; 원격 생성·공개·푸시는 별도 지시"
+    "coverage": "Local Git setup complete; data and weights excluded",
+    "remaining": "Existing team remote URL required; creating a remote, publishing, or pushing requires separate instructions"
   },
   {
     "id": "P5/U9/U10",
-    "requirement": "제공된 처리 코드 연결",
-    "status": "완료",
+    "requirement": "Integrate the supplied processing code",
+    "status": "Complete",
     "evidence": "phase1/upstream_processors.py; reports/smoke_processing.json",
-    "coverage": "25원본 × 16조건; IDENTITY+JPEG6 핵심 및 추가9 모듈",
+    "coverage": "25 source images × 16 conditions; core IDENTITY+JPEG6 conditions plus 9 additional modules",
     "remaining": "—"
   },
   {
     "id": "U6/U7",
-    "requirement": "원본 연결·라벨·분할 누출 검사",
-    "status": "완료",
+    "requirement": "Verify source links, labels, and split leakage",
+    "status": "Complete",
     "evidence": "data/manifests; reports/smoke_validation.json",
-    "coverage": "전체 원본 목록 및 실험 표본의 photo-group/identity 분할 검사",
-    "remaining": "전체 근접중복·사전학습 중복 여부는 미확인"
+    "coverage": "Full source inventory and photo-group/identity split checks for the experimental samples",
+    "remaining": "Near-duplicate checks across the full dataset and overlap with pretraining data remain unverified"
   },
   {
     "id": "U8",
-    "requirement": "기준 얼굴·시각 검토",
-    "status": "완료",
+    "requirement": "Prepare reference faces and perform visual review",
+    "status": "Complete",
     "evidence": "reports/reference_review.json; reports/pilot_reference_review.json; reports/smoke_sources.png",
-    "coverage": "기존 크롭 유지; EXIF 방향만 1회; PNG 기준; 표본 검토 범위 별도 기록",
-    "remaining": "전체 업로드의 얼굴/신원 수동 검토는 수행하지 않음"
+    "coverage": "Existing crops retained; EXIF orientation applied 1 time; PNG references; sample review coverage documented separately",
+    "remaining": "Faces and identities have not been manually reviewed across the entire upload"
   },
   {
     "id": "U13/U15",
-    "requirement": "모델별 특징·행 정렬·기본 유사도",
-    "status": "완료",
+    "requirement": "Verify model features, row alignment, and basic similarities",
+    "status": "Complete",
     "evidence": "features; reports/*_validation.json",
-    "coverage": "raw/L2 분리; source/person/processing/model/hash/layer 매핑; 3종 유사도",
+    "coverage": "Separate raw and L2-normalized features; source/person/processing/model/hash/layer mappings; 3 similarity groups",
     "remaining": "—"
   },
   {
     "id": "U14",
-    "requirement": "25장 실행과 실측 확장",
-    "status": "완료",
+    "requirement": "Run a 25-image smoke test and scale up using measured results",
+    "status": "Complete",
     "evidence": "reports/smoke_validation.json; reports/pilot_validation.json",
-    "coverage": "smoke 25장; pilot 99장",
+    "coverage": "25-image smoke run; 99-image pilot run",
     "remaining": "—"
   },
   {
     "id": "U4/U16/U17",
-    "requirement": "환경·실행·재개 증거",
-    "status": "완료",
+    "requirement": "Record the environment, execution, and resume checks",
+    "status": "Complete",
     "evidence": "reports/environment.json; reports/command_runs.jsonl; reports/resume_verification.json",
-    "coverage": "프로젝트 venv; 실제 실행 명령/종료코드; checkpoint·feature shard 재개",
+    "coverage": "Project virtual environment; actual commands and exit codes; checkpoint and feature shard resumption",
     "remaining": "—"
   },
   {
     "id": "U1/U18",
-    "requirement": "문서·그림·Phase 2 인계",
-    "status": "완료",
+    "requirement": "Prepare documentation, figures, and the Phase 2 handoff",
+    "status": "Complete",
     "evidence": "README.md; docs; reports; data/manifests; features",
-    "coverage": "요구사항 출처와 구현 선택 구분; workflow; 실제 표본 비교; 상태·한계",
+    "coverage": "Requirement sources distinguished from implementation choices; workflow; comparisons of actual samples; status and limitations",
     "remaining": "—"
   }
 ]
