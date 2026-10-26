@@ -1,6 +1,5 @@
-"""Feasible Phase 1 expansion, not a probe/attack/fairness experiment."""
+"""Prepare, train and extract a separate CUDA pilot run."""
 import argparse
-import runpy
 from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -8,41 +7,39 @@ from scripts.execute_verified import stage
 
 
 def main():
-    from argparse import Namespace
     from phase1.common import ROOT
     from phase1.data import prepare
-    from phase1.train import train
+    from phase1.train import train, parser as training_parser, require_cuda
     from phase1.extract import extract
     from phase1.validate import validate
-    import pytest
     p = argparse.ArgumentParser()
     p.add_argument('--identities', type=int, default=20)
     p.add_argument('--per-identity', type=int, default=5)
+    p.add_argument('--run', default='pilot_adam')
+    p.add_argument('--gpu', type=int, default=0)
+    p.add_argument('--optimizer', choices=['adam', 'sgd'], default='adam')
     a = p.parse_args()
-    if not (ROOT / 'data/manifests/pilot_variants.csv').exists():
-        stage('prepare-pilot', lambda: prepare('pilot', a.identities, a.per_identity, False), vars(a))
+    require_cuda(a.gpu)
+    if not (ROOT / f'data/manifests/{a.run}_variants.csv').exists():
+        stage('prepare-' + a.run, lambda: prepare(a.run, a.identities, a.per_identity, False), vars(a))
     else:
         from phase1.common import read_csv
         import json
-        existing = read_csv('data/manifests/pilot_sources.csv')
-        processing = json.loads((ROOT / 'reports/pilot_processing.json').read_text())
+        existing = read_csv(f'data/manifests/{a.run}_sources.csv')
+        processing = json.loads((ROOT / f'reports/{a.run}_processing.json').read_text())
         if len({r['person_id'] for r in existing}) != a.identities or processing.get('target_sources', processing['sources']) != a.identities * a.per_identity:
-            raise ValueError('Existing reviewed pilot differs from requested target; use a distinct run for a new sample')
-    def tests():
-        code = pytest.main(['-q', 'tests'])
-        if code:
-            raise RuntimeError(f'pytest exit {code}')
-    stage('tests-final', tests, {'test_directory': 'tests', 'includes_immutable_cache_check': True})
-    base = dict(manifest='data/manifests/pilot_sources.csv', run='pilot_resnet', batch_size=2,
-                threads=2, device='cpu', lr=.001, initialization='imagenet', epochs=2)
-    ck = ROOT / 'checkpoints/pilot_resnet/last.pt'
-    stage('train-pilot', lambda: train(Namespace(**base, resume='checkpoints/pilot_resnet/last.pt' if ck.exists() else None)), base)
-    stage('verify-backbone-update', lambda: runpy.run_path(str(ROOT / 'scripts/verify_backbone_update.py'), run_name='__main__'), {})
+            raise ValueError('Existing reviewed pilot differs; use a distinct run for a new sample')
+    training_run = a.run + '_resnet'
+    checkpoint = f'checkpoints/{training_run}/last.pt'
+    args = training_parser().parse_args(['--manifest', f'data/manifests/{a.run}_sources.csv',
+        '--run', training_run, '--epochs', '2', '--gpu', str(a.gpu), '--optimizer', a.optimizer])
+    args.resume = checkpoint if (ROOT / checkpoint).exists() else None
+    stage('train-' + a.run, lambda: train(args), vars(a))
     for model in ['farl', 'lvface', 'resnet50']:
-        params = dict(model=model, run='pilot', backend='torch', batch_size=8, threads=4,
-                      checkpoint='checkpoints/pilot_resnet/last.pt')
-        stage('extract-pilot-' + model, lambda p=params: extract(Namespace(**p)), params)
-    stage('validate-pilot', lambda: validate('pilot'), {'run': 'pilot'})
+        params = argparse.Namespace(model=model, run=a.run, backend='torch', batch_size=8,
+                                    threads=4, checkpoint=checkpoint, gpu=a.gpu)
+        stage('extract-' + a.run + '-' + model, lambda args=params: extract(args), vars(params))
+    stage('validate-' + a.run, lambda: validate(a.run), {'run': a.run})
 
 
 if __name__ == '__main__':

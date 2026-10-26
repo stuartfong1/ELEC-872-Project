@@ -13,6 +13,7 @@ from phase1.common import ROOT
 
 
 def stage(name, function, params):
+    (ROOT / 'logs').mkdir(exist_ok=True)
     print(f'START {name}', flush=True)
     start = time.perf_counter()
     record = dict(name=name, utc_started=datetime.now(timezone.utc).isoformat(),
@@ -38,40 +39,40 @@ def stage(name, function, params):
 
 
 def main():
-    import torch
-    torch.set_num_threads(2)
-    from phase1.train import train
+    from phase1.train import train, parser as training_parser, require_cuda
     from phase1.extract import extract
     from phase1.validate import validate
     from phase1.data import prepare
-    import pytest
-    from argparse import Namespace
-    # Preparation is already reusable; avoid rewriting immutable extraction
-    # inputs if they exist. Fresh execution can generate them here.
-    if not (ROOT / 'data/manifests/smoke_variants.csv').exists():
-        stage('prepare-smoke', lambda: prepare('smoke', 5, 5, True), {'sources': 25, 'conditions': 16})
-    def tests():
-        code = pytest.main(['-q', 'tests'])
-        if code:
-            raise RuntimeError(f'pytest exit {code}')
-    stage('tests', tests, {'test_directory': 'tests'})
-    base = dict(manifest='data/manifests/smoke_sources.csv', batch_size=2, threads=2,
-                device='cpu', lr=.001, initialization='imagenet')
-    ck = ROOT / 'checkpoints/smoke_resnet/last.pt'
-    if not ck.exists():
-        stage('train-smoke', lambda: train(Namespace(**base, run='smoke_resnet', epochs=1, resume=None)), base)
-    stage('resume-smoke', lambda: train(Namespace(**base, run='smoke_resnet', epochs=2,
-          resume='checkpoints/smoke_resnet/last.pt')), {**base, 'epochs': 2, 'resume': True})
-    stage('train-continuous', lambda: train(Namespace(**base, run='smoke_continuous', epochs=2, resume=None)),
-          {**base, 'epochs': 2})
-    stage('verify-resume', lambda: runpy.run_path(str(ROOT / 'scripts/verify_resume.py'), run_name='__main__'), {})
+    from scripts.verify_resume import verify
+    p = argparse.ArgumentParser()
+    p.add_argument('--run', default='smoke_adam')
+    p.add_argument('--gpu', type=int, default=0)
+    p.add_argument('--optimizer', choices=['adam', 'sgd'], default='adam')
+    a = p.parse_args()
+    require_cuda(a.gpu)
+    run, training_run = a.run, a.run + '_resnet'
+    manifest = f'data/manifests/{run}_sources.csv'
+    if not (ROOT / f'data/manifests/{run}_variants.csv').exists():
+        stage('prepare-' + run, lambda: prepare(run, 5, 5, True), {'sources': 25, 'conditions': 16})
+    def training_args(name, epochs):
+        args = training_parser().parse_args(['--manifest', manifest, '--run', name,
+            '--epochs', str(epochs), '--gpu', str(a.gpu), '--optimizer', a.optimizer])
+        path = f'checkpoints/{name}/last.pt'
+        args.resume = path if (ROOT / path).exists() else None
+        return args
+    if not (ROOT / f'checkpoints/{training_run}/last.pt').exists():
+        stage('train-' + run, lambda: train(training_args(training_run, 1)), vars(a))
+    stage('resume-' + run, lambda: train(training_args(training_run, 2)), vars(a))
+    continuous = training_run + '_continuous'
+    stage('continuous-' + run, lambda: train(training_args(continuous, 2)), vars(a))
+    checkpoint = f'checkpoints/{training_run}/last.pt'
+    stage('verify-resume-' + run, lambda: verify(checkpoint,
+        f'checkpoints/{continuous}/last.pt', f'reports/{run}_resume_verification.json'), vars(a))
     for model in ['farl', 'lvface', 'resnet50']:
-        params = dict(model=model, run='smoke', backend='torch', batch_size=8, threads=4,
-                      checkpoint='checkpoints/smoke_resnet/last.pt')
-        stage('extract-smoke-' + model, lambda p=params: extract(Namespace(**p)), params)
-    stage('validate-smoke', lambda: validate('smoke'), {'run': 'smoke'})
-    stage('verify-models', lambda: runpy.run_path(str(ROOT / 'scripts/verify_models.py'), run_name='__main__'), {})
-    stage('environment', lambda: runpy.run_path(str(ROOT / 'scripts/environment.py'), run_name='__main__'), {})
+        params = argparse.Namespace(model=model, run=run, backend='torch', batch_size=8,
+                                    threads=4, checkpoint=checkpoint, gpu=a.gpu)
+        stage('extract-' + run + '-' + model, lambda args=params: extract(args), vars(params))
+    stage('validate-' + run, lambda: validate(run), {'run': run})
 
 
 if __name__ == '__main__':

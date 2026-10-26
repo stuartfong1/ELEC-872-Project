@@ -1,10 +1,11 @@
-param([string]$Environment = '.venv-run')
+param([string]$Environment = '.venv-cuda')
 $ErrorActionPreference = 'Stop'
 Set-Location (Split-Path $PSScriptRoot -Parent)
-# Reuse read-only system packages when available; pip writes into this venv.
-# --without-pip avoids copying the bundled pip tree; inherited pip is sufficient.
-python -S -m venv --system-site-packages --without-pip $Environment
+if (Test-Path -LiteralPath $Environment) { throw 'Choose a new environment directory; existing environments are preserved.' }
+python -m venv $Environment
 if ($LASTEXITCODE -ne 0) { throw 'Virtual environment creation failed' }
 $projectPython = Join-Path (Get-Location) "$Environment\Scripts\python.exe"
-& $projectPython -m pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
-if ($LASTEXITCODE -ne 0) { throw 'Project dependency installation failed' }
+& $projectPython -m pip install -r requirements-cuda.txt
+if ($LASTEXITCODE -ne 0) { throw 'CUDA dependency installation failed' }
+& $projectPython -c "import torch; assert torch.cuda.is_available(), 'CUDA is unavailable: check NVIDIA hardware and driver'; print(torch.cuda.get_device_name(0))"
+if ($LASTEXITCODE -ne 0) { throw 'CUDA verification failed; no CPU fallback is configured.' }

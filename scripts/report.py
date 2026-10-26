@@ -21,13 +21,14 @@ def main():
     resume = load('reports/resume_verification.json')
     smoke = load('reports/smoke_validation.json')
     pilot = load('reports/pilot_validation.json')
-    main_progress = load('reports/main_resnet_progress.json')
+    main_run = (load('configs/phase1.json') or {}).get('resnet50', {}).get('run', 'main_resnet_adam')
+    main_progress = load(f'reports/{main_run}_progress.json')
     main_manifest = load('reports/main_manifest.json')
     main_completed = bool(main_progress and main_progress.get('full_face_training_completed'))
     main_running = False
     if main_progress and main_progress.get('status') == 'running':
         try:
-            main_running = 'phase1.main_train' in psutil.Process(main_progress['pid']).cmdline()
+            main_running = 'phase1.train' in psutil.Process(main_progress['pid']).cmdline()
         except psutil.Error:
             pass
     training = load('reports/pilot_resnet_training.json') or load('reports/smoke_resnet_training.json')
@@ -62,7 +63,7 @@ def main():
         'FaRL ep16 / LVFace-T; frozen weights and evaluation mode; verified output dimensions; LVFace ONNX comparison')
     row('P3/U12', 'Train ResNet50 on face identities',
         'Training schedule complete' if main_completed else 'In progress' if main_running else 'Incomplete',
-        'reports/main_resnet_progress.json; reports/main_manifest.json; reports/main_training_verification.json'
+        f'reports/{main_run}_progress.json; reports/main_manifest.json; reports/{main_run}_verification.json'
         if main_progress else 'reports/smoke_resnet_training.json; reports/resume_verification.json',
         f"Main training on {main_manifest['identities']} identities, with {main_manifest['train_images']:,} training images / {main_manifest['validation_images']:,} internal validation images; target of {main_progress['target_epochs']} epochs"
         if main_manifest and main_progress else 'Verified loss, backward pass, validation, saving, and resume; small-scale face identity training from ImageNet initialization',
@@ -97,7 +98,7 @@ def main():
         lines += ['', '## Main ResNet50 Training', '',
                   f"Snapshot timestamp (UTC): {main_progress['updated_utc']}. Process confirmed running: {main_running}. Status: {main_progress['status']}.",
                   f"Target: {main_progress['target_epochs']} epochs. Current epoch: {main_progress['epoch_display']}. Total optimizer steps: {main_progress['global_step']:,}.",
-                  'The latest progress is recorded in `reports/main_resnet_progress.json`, and log locations are listed in `logs/main_resnet_launch.json`. This paragraph is a snapshot taken when the report was generated.',
+                  f'The latest progress is recorded in `reports/{main_run}_progress.json`, and log locations are listed in `logs/{main_run}_launch.json`. This paragraph is a snapshot taken when the report was generated.',
                   'Use `scripts/Stop-MainTraining.ps1` and `scripts/Start-MainTraining.ps1` to pause and resume training. Intermediate checkpoints are saved every 300 steps.']
     lines += ['', '## Data and Model Validation', '']
     if inv:

@@ -11,5 +11,5 @@
   "reference_policy": "existing VGGFace2 crop, EXIF orientation applied once, full RGB extent, no new detection/alignment",
   "farl": {"checkpoint": "weights/FaRL-Base-Patch16-LAIONFace20M-ep16.pth", "input": 224, "feature": "visual projection output", "frozen": true},
   "lvface": {"checkpoint": "weights/LVFace-T_Glint360K.pt", "onnx": "weights/LVFace-T_Glint360K.onnx", "architecture": "vit_t", "input": 112, "feature": "final embedding", "frozen": true},
-  "resnet50": {"initialization": "IMAGENET1K_V2", "input": 224, "feature": "flattened avgpool before identity fc", "full_backbone_trainable": true, "epochs_main": 10, "batch_size": 2, "lr": 0.001}
+  "resnet50": {"initialization": "IMAGENET1K_V2", "input": 224, "feature": "flattened avgpool before identity fc", "full_backbone_trainable": true, "epochs_main": 2, "batch_size": 2, "lr": 0.001, "optimizer": "adam", "device": "cuda", "gpu": 0, "run": "main_resnet_adam"}
 }
