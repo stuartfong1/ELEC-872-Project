@@ -16,5 +16,7 @@ reports/*.png
 reports/*.npz
 reports/main_resnet_progress.json
 reports/main_resnet_training.json
+reports/*_progress.json
+reports/*_training.json
 # Keep all Korean originals local, including nested files and directories.
 *_[kK][rR]*
