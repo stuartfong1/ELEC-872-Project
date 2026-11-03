@@ -1,0 +1,14 @@
+exp_name: resnet50
+
+model_name: resnet50
+embedding_dim: 128
+weights_path: null  # Checkpoint to load, or null to train from scratch
+
+batch_size: 64
+num_epochs: 20
+learning_rate: 0.001
+triplet_margin: 0.2
+hard_negative_mining: true
+num_workers: 4
+checkpoint_dir: checkpoints
+dataset_dir: data/vggface2
