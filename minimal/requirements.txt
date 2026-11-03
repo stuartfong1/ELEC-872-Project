@@ -1,7 +1,0 @@
-torch
-torchvision
-numpy
-Pillow
-tqdm
-pyyaml
-pytorch-metric-learning>=2.0
