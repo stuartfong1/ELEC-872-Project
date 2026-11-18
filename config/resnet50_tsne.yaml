@@ -1,0 +1,15 @@
+exp_name: resnet50_tsne
+
+model_name: resnet50
+embedding_dim: 128
+weights_path: /global/home/hpc6252/ELEC-872-Project/checkpoints/resnet50/epoch_13_acc_0.604.pt
+
+batch_size: 32
+num_epochs: 10
+learning_rate: 0.001
+triplet_margin: 0.2
+hard_negative_mining: true
+num_workers: 4
+checkpoint_dir: checkpoints
+dataset_dir: data/lfw
+people_csv_path: data/lfw/peopleDevTest.csv

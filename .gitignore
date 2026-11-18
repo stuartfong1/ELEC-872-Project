@@ -1,2 +1,5 @@
 checkpoints/
 */__pycache__
+*.err
+*.out
+elec872_venv/
