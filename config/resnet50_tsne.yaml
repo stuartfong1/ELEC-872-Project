@@ -4,8 +4,8 @@ model_name: resnet50
 embedding_dim: 128
 weights_path: /global/home/hpc6252/ELEC-872-Project/checkpoints/resnet50/epoch_13_acc_0.604.pt
 
-batch_size: 32
-num_epochs: 10
+batch_size: 64
+num_epochs: 20
 learning_rate: 0.001
 triplet_margin: 0.2
 hard_negative_mining: true

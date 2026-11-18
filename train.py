@@ -4,13 +4,14 @@ from pathlib import Path
 import torch
 import torch.nn.functional as F
 import yaml
-from data.face_dataset import FaceDataset
-from model.model_registry import ModelRegistry
 from pytorch_metric_learning import losses, miners
 from pytorch_metric_learning.utils.accuracy_calculator import AccuracyCalculator
 from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+
+from data.face_dataset import FaceDataset
+from model.model_registry import ModelRegistry
 
 
 def dataset_triplet_indices(

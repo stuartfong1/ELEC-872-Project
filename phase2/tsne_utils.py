@@ -47,7 +47,7 @@ FIGURE_DIR = Path(__file__).parent / "figures"
 
 
 def load_config_from_arguments() -> dict:
-    """Parse ``--config`` from the command line and load that YAML file.
+    """Parse --config from the command line and load that YAML file.
 
     Returns
     -------
@@ -55,12 +55,25 @@ def load_config_from_arguments() -> dict:
         Settings from the YAML config.
 
     """
+    # Read YAML config
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, required=True)
-    arguments = parser.parse_args()
+    parser.add_argument("--config", type=Path, required=True)
+    # Just in case our dataset is in $SLURM_TMPDIR
+    parser.add_argument("--data_dir", type=Path)
+    args = parser.parse_args()
 
-    with Path(arguments.config).open() as config_file:
-        return yaml.safe_load(config_file)
+    with Path.open(args.config) as config_file:
+        config = yaml.safe_load(config_file)
+
+    # Override dataset directory in YAML path if specified in arguments
+    if args.data_dir is not None:
+        config["dataset_dir"] = args.data_dir / "lfw-deepfunneled" / "lfw-deepfunneled"
+        # Also override the path to the people_csv_path.csv file
+        # for specifying the subjects in the test split
+        config["people_csv_path"] = args.data_dir / "peopleDevTest.csv"
+
+    return config
+
 
 
 def load_model_and_dataset(config: dict) -> tuple[nn.Module, FaceMetadataDataset, str]:
@@ -69,14 +82,14 @@ def load_model_and_dataset(config: dict) -> tuple[nn.Module, FaceMetadataDataset
     Parameters
     ----------
     config : dict
-        Settings from the YAML config. ``weights_path`` must point to a checkpoint.
+        Settings from the YAML config. weights_path must point to a checkpoint.
 
     Returns
     -------
     model : nn.Module
-        Embedding model in eval mode, on ``device``.
+        Embedding model in eval mode, on device.
     dataset : FaceMetadataDataset
-        LFW test set with the processors in ``PROCESSORS_TO_COMPARE``.
+        LFW test set with the processors in PROCESSORS_TO_COMPARE.
     device : str
         Device the model is on.
 
@@ -99,7 +112,7 @@ def load_model_and_dataset(config: dict) -> tuple[nn.Module, FaceMetadataDataset
 
 
 def select_random_people(dataset: FaceMetadataDataset) -> list[int]:
-    """Pick ``NUMBER_OF_PEOPLE_TO_PLOT`` identity labels at random with a fixed seed.
+    """Pick NUMBER_OF_PEOPLE_TO_PLOT identity labels at random with a fixed seed.
 
     Parameters
     ----------
@@ -118,7 +131,7 @@ def select_random_people(dataset: FaceMetadataDataset) -> list[int]:
 
 
 def source_image_indices_of_person(dataset: FaceMetadataDataset, identity_label: int) -> list[int]:
-    """List the source image indices (into ``dataset.image_paths``) of one person.
+    """List the source image indices (into dataset.image_paths) of one person.
 
     Parameters
     ----------
@@ -148,14 +161,14 @@ def flat_dataset_index(dataset: FaceMetadataDataset, source_image_index: int, pr
     dataset : FaceMetadataDataset
         Dataset whose indexing scheme is used.
     source_image_index : int
-        Index into ``dataset.image_paths``.
+        Index into dataset.image_paths.
     processor_index : int
-        Index into ``dataset.processors``.
+        Index into dataset.processors.
 
     Returns
     -------
     int
-        ``source_image_index * number_of_processors + processor_index``.
+        source_image_index * number_of_processors + processor_index.
 
     """
     return source_image_index * len(dataset.processors) + processor_index
@@ -179,17 +192,17 @@ def embed_dataset_items(
     flat_indices : list[int]
         Flat dataset indices of the items to embed.
     config : dict
-        Settings from the YAML config (``batch_size`` and ``num_workers``).
+        Settings from the YAML config (batch_size and num_workers).
     device : str
         Device the model is on.
 
     Returns
     -------
     dict[str, np.ndarray]
-        Arrays aligned with ``flat_indices``:
-        ``embeddings`` (N, embedding_dim) with unit L2 norm,
-        ``distortion_labels`` (N,), ``identity_labels`` (N,),
-        ``source_image_indices`` (N,).
+        Arrays aligned with flat_indices:
+        embeddings (N, embedding_dim) with unit L2 norm,
+        distortion_labels (N,), identity_labels (N,),
+        source_image_indices (N,).
 
     """
     # shuffle=False keeps the output in the same order as flat_indices
@@ -239,5 +252,10 @@ def run_tsne(embeddings: np.ndarray) -> np.ndarray:
     """
     # Perplexity must be smaller than the number of points
     perplexity = min(30.0, len(embeddings) - 1)
-    tsne = TSNE(n_components=2, perplexity=perplexity, init="pca", random_state=RANDOM_SEED)
+    tsne = TSNE(
+        n_components=2,
+        perplexity=perplexity,
+        init="pca",
+        random_state=RANDOM_SEED,
+    )
     return tsne.fit_transform(embeddings)
