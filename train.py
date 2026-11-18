@@ -174,7 +174,7 @@ def train(config: dict) -> None:
                     "model": model.state_dict(),
                     "optimizer": optimizer.state_dict(),
                 },
-                checkpoint_dir / f"epoch_{epoch}_acc_{val_accuracy:.3f}.pt",
+                checkpoint_dir / f"epoch_{epoch + 1}_acc_{val_accuracy:.3f}.pt",
             )
 
 

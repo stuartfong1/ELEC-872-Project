@@ -98,5 +98,35 @@ class ModelRegistry:
                     model=model,
                     transform=transform,
                 )
+            case "resnet18":
+                # ResNet18 trained from scratch
+                # Set num_classes to the embedding dimension
+                # so that it outputs the embeddings directly
+                model = models.resnet18(weights=None, num_classes=cls._config["embedding_dim"])
+
+                # Optionally, load a checkpoint saved by train.py
+                # Checkpoints store the model weights and optimizer state
+                if cls._config["weights_path"] is not None:
+                    checkpoint = torch.load(cls._config["weights_path"], map_location="cpu")
+                    model.load_state_dict(checkpoint["model"])
+
+                # Resize the shorter side to 224 and center-crop to 224x224
+                # Normalize using the ImageNet mean/std
+                transform = transforms.Compose(
+                    [
+                        transforms.Resize(224),
+                        transforms.CenterCrop(224),
+                        transforms.ToTensor(),
+                        transforms.Normalize(
+                            mean=(0.485, 0.456, 0.406),
+                            std=(0.229, 0.224, 0.225),
+                        ),
+                    ],
+                )
+
+                cls._models[model_name] = RetrievedModel(
+                    model=model,
+                    transform=transform,
+                )
 
         return cls._models[model_name]
