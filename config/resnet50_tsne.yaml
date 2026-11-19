@@ -13,3 +13,4 @@ num_workers: 4
 checkpoint_dir: checkpoints
 dataset_dir: data/lfw
 people_csv_path: data/lfw/peopleDevTest.csv
+people_selection: nearest  # "random" or "nearest"

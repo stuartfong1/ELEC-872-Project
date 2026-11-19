@@ -22,7 +22,7 @@ from tsne_utils import (
     load_config_from_arguments,
     load_model_and_dataset,
     run_tsne,
-    select_random_people,
+    select_people,
     source_image_indices_of_person,
 )
 
@@ -31,7 +31,7 @@ def main() -> None:
     """Embed every undistorted photo of the selected people and plot a t-SNE."""
     config = load_config_from_arguments()
     model, dataset, device = load_model_and_dataset(config)
-    selected_identity_labels = select_random_people(dataset)
+    selected_identity_labels = select_people(model, dataset, config, device)
 
     # Every photo of every selected person, without any distortion
     flat_indices = [

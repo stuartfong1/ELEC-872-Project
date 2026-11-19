@@ -38,7 +38,8 @@ PROCESSORS_TO_COMPARE: list[Processor] = [
 ]
 IDENTITY_PROCESSOR_INDEX = 0
 
-# Number of people shown in each plot, and the seed used to pick them and run t-SNE
+# Number of people shown in each plot, and the seed used to pick them and run t-SNE.
+# How people are picked ("random" or "nearest") is set by people_selection in the YAML config.
 NUMBER_OF_PEOPLE_TO_PLOT = 10
 RANDOM_SEED = 0
 
@@ -111,13 +112,26 @@ def load_model_and_dataset(config: dict) -> tuple[nn.Module, FaceMetadataDataset
     return model, dataset, device
 
 
-def select_random_people(dataset: FaceMetadataDataset) -> list[int]:
-    """Pick NUMBER_OF_PEOPLE_TO_PLOT identity labels at random with a fixed seed.
+def select_people(
+    model: nn.Module,
+    dataset: FaceMetadataDataset,
+    config: dict,
+    device: str,
+) -> list[int]:
+    """Pick NUMBER_OF_PEOPLE_TO_PLOT identity labels using config["people_selection"].
 
     Parameters
     ----------
+    model : nn.Module
+        Embedding model in eval mode (only used by "nearest").
     dataset : FaceMetadataDataset
-        Dataset whose identities are sampled.
+        Dataset whose identities are selected.
+    config : dict
+        Settings from the YAML config. people_selection is either
+        "random" (seeded random sample) or "nearest" (people whose mean
+        embeddings are closest to each other, see select_nearest_people).
+    device : str
+        Device the model is on.
 
     Returns
     -------
@@ -125,9 +139,83 @@ def select_random_people(dataset: FaceMetadataDataset) -> list[int]:
         Sorted identity labels of the selected people.
 
     """
-    random_generator = random.Random(RANDOM_SEED)
+    match config["people_selection"]:
+        case "random":
+            random_generator = random.Random(RANDOM_SEED)
+            number_of_identities = len(dataset.identity_names)
+            return sorted(random_generator.sample(range(number_of_identities), NUMBER_OF_PEOPLE_TO_PLOT))
+        case "nearest":
+            return select_nearest_people(model, dataset, config, device)
+        case _:
+            raise ValueError(f"Unknown people_selection: {config['people_selection']}")
+
+
+def select_nearest_people(
+    model: nn.Module,
+    dataset: FaceMetadataDataset,
+    config: dict,
+    device: str,
+) -> list[int]:
+    """Pick the tightest group of people in embedding space.
+
+    Every person is summarised by the centroid of their undistorted photo
+    embeddings, renormalised to unit norm. Writing K = NUMBER_OF_PEOPLE_TO_PLOT,
+    each person in turn is treated as an anchor with its K-1 nearest centroids
+    (by cosine distance) as its neighbourhood. The anchor whose neighbourhood
+    has the smallest mean distance to the anchor is chosen, and the anchor plus
+    its neighbours are returned.
+
+    Parameters
+    ----------
+    model : nn.Module
+        Embedding model in eval mode.
+    dataset : FaceMetadataDataset
+        Dataset whose identities are selected.
+    config : dict
+        Settings from the YAML config (batch_size and num_workers).
+    device : str
+        Device the model is on.
+
+    Returns
+    -------
+    list[int]
+        Sorted identity labels of the K selected people.
+
+    """
+    # Embed every undistorted photo of every valid person
+    flat_indices = [
+        flat_dataset_index(dataset, source_image_index, IDENTITY_PROCESSOR_INDEX)
+        for source_image_index in range(len(dataset.image_paths))
+    ]
+    embedded_items = embed_dataset_items(model, dataset, flat_indices, config, device)
+    embeddings = embedded_items["embeddings"]
+    identity_labels = embedded_items["identity_labels"]
+
+    # Centroid of each person, projected back onto the unit sphere so that
+    # 1 - dot product is the cosine distance between centroids
     number_of_identities = len(dataset.identity_names)
-    return sorted(random_generator.sample(range(number_of_identities), NUMBER_OF_PEOPLE_TO_PLOT))
+    centroids = np.stack([
+        embeddings[identity_labels == identity_label].mean(axis=0)
+        for identity_label in range(number_of_identities)
+    ])
+    centroids /= np.linalg.norm(centroids, axis=1, keepdims=True)
+    centroid_distances = 1.0 - centroids @ centroids.T
+    # A person must not count as their own neighbour
+    np.fill_diagonal(centroid_distances, np.inf)
+
+    # Loop over every person as the anchor and score their neighbourhood
+    number_of_neighbours = NUMBER_OF_PEOPLE_TO_PLOT - 1
+    best_mean_distance = np.inf
+    best_group: list[int] = []
+    for anchor_identity_label in range(number_of_identities):
+        nearest_identity_labels = np.argsort(centroid_distances[anchor_identity_label])[:number_of_neighbours]
+        mean_distance = centroid_distances[anchor_identity_label, nearest_identity_labels].mean()
+        if mean_distance < best_mean_distance:
+            best_mean_distance = mean_distance
+            best_group = [anchor_identity_label, *nearest_identity_labels.tolist()]
+
+    print(f"Nearest group: mean anchor-to-neighbour centroid cosine distance = {best_mean_distance:.4f}")
+    return sorted(best_group)
 
 
 def source_image_indices_of_person(dataset: FaceMetadataDataset, identity_label: int) -> list[int]:
