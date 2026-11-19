@@ -76,6 +76,7 @@ def train(config: dict) -> None:
         dataset_dir=config["dataset_dir"],
         split="train",
         transform=image_transform,
+        correlated_distortions=config["correlated_distortions"],
     )
     train_dataloader = DataLoader(
         train_dataset,
@@ -92,6 +93,7 @@ def train(config: dict) -> None:
         split="val",
         transform=image_transform,
         return_triplets=False,
+        correlated_distortions=config["correlated_distortions"],
     )
     val_dataloader = DataLoader(
         val_dataset,

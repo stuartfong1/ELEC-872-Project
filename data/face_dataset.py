@@ -8,6 +8,20 @@ from PIL import Image
 from torch.utils.data import Dataset
 from torchvision.transforms import v2
 
+from data.processors import Processor
+
+# Distortions assigned to identities when correlated_distortions=True
+CORRELATED_DISTORTION_PROCESSORS: list[Processor] = [
+    Processor.JPEG75_420,
+    Processor.JPEG75_444,
+    Processor.JPEG85_420,
+    Processor.JPEG85_444,
+    Processor.JPEG95_420,
+    Processor.JPEG95_444,
+    Processor.SHARPEN_2,
+    Processor.SHARPEN_4,
+]
+
 
 class FaceDataset(Dataset):
     """VGGFace2 face dataset that returns triplets or single labelled images.
@@ -32,6 +46,11 @@ class FaceDataset(Dataset):
     During validation (return_triplets=False), each item is just one image and
     its identity label for nearest-neighbour evaluation.
 
+    If correlated_distortions=True, every identity is assigned one fixed
+    distortion from CORRELATED_DISTORTION_PROCESSORS (round-robin by identity
+    label), which is applied to all of that person's images before the
+    transform. This deliberately correlates the distortion with the identity.
+
     """
 
     def __init__(
@@ -41,6 +60,7 @@ class FaceDataset(Dataset):
         transform = None,
         *,
         return_triplets: bool = True,
+        correlated_distortions: bool = False,
     ) -> None:
         """Initialize the FaceDataset class.
 
@@ -56,6 +76,9 @@ class FaceDataset(Dataset):
         return_triplets : bool, optional
             If True (default), each item is an (anchor, positive, negative) triplet
             with labels. If False, each item is a single (image, label) pair.
+        correlated_distortions : bool, optional
+            If True, apply one fixed distortion per identity to all of that
+            person's images. Default is False (no distortion).
 
         """
         if transform is None:
@@ -92,6 +115,19 @@ class FaceDataset(Dataset):
             self.image_indices_by_identity.append(
                 list(range(first_index, first_index + len(identity_image_paths))),
             )
+
+        # Optionally fix one distortion per identity.
+        # The processor callables are built once and shared by all identities;
+        # each identity only stores the index of its processor (round-robin).
+        self.correlated_distortions = correlated_distortions
+        if correlated_distortions:
+            self.processor_functions = [
+                processor.get_processing() for processor in CORRELATED_DISTORTION_PROCESSORS
+            ]
+            self.processor_index_by_identity: list[int] = [
+                identity_label % len(CORRELATED_DISTORTION_PROCESSORS)
+                for identity_label in range(len(self.image_indices_by_identity))
+            ]
 
     def sample_triplet(
         self,
@@ -138,7 +174,7 @@ class FaceDataset(Dataset):
         return anchor_index, positive_index, negative_index
 
     def load_image(self, index: int) -> torch.Tensor:
-        """Load one image from path and apply the transform.
+        """Load one image from path, apply its identity's distortion (if any), then the transform.
 
         Parameters
         ----------
@@ -153,6 +189,14 @@ class FaceDataset(Dataset):
         """
         # Convert to RGB
         image = Image.open(self.image_paths[index]).convert("RGB")
+
+        # The distortion is applied to the raw image, before resize/crop/normalize.
+        # The second convert("RGB") forces PIL to fully decode the in-memory JPEG
+        # returned by JPEGCompression and guarantees 3 channels.
+        if self.correlated_distortions:
+            processor_index = self.processor_index_by_identity[self.identity_labels[index]]
+            image = self.processor_functions[processor_index](image).convert("RGB")
+
         return self.transform(image)
 
     def __len__(self) -> int:

@@ -12,3 +12,4 @@ hard_negative_mining: true
 num_workers: 4
 checkpoint_dir: checkpoints
 dataset_dir: data/vggface2
+correlated_distortions: false  # If true, each identity gets one fixed distortion
